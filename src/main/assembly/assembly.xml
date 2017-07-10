@@ -1,0 +1,27 @@
+<assembly>
+	<id>assembly</id>
+	<formats>
+		<!--<format>tar.gz</format>-->
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>true</includeBaseDirectory>
+	<fileSets>
+		<!--<fileSet>-->
+			<!--<directory>${project.basedir}/logs</directory>-->
+			<!--<outputDirectory>logs</outputDirectory>-->
+			<!--&lt;!&ndash;<fileMode>0755</fileMode>&ndash;&gt;-->
+		<!--</fileSet>-->
+		<fileSet>
+			<directory>${project.basedir}/bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<fileMode>0755</fileMode>
+			<!--<fileMode>0755</fileMode>-->
+		</fileSet>
+
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>
