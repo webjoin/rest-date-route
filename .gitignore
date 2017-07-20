@@ -2,3 +2,6 @@
 .idea/
 logs/
 target/
+*.zip
+mate/
+bin/

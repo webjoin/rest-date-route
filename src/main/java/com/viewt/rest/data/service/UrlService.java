@@ -5,6 +5,7 @@ import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.bean.RespSelectBean;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Elijah on 7/7/2017.
@@ -19,4 +20,31 @@ public interface UrlService {
 
     JSONObject getShopList(String w_addr,String cookie, String uuid , String pageIndex);
     JSONObject getShop(String wm_poi_id, String _token, String uuid, String cookie);
+
+    void testAbuyun();
+
+
+    RespBean post(String url,
+                  Map<String, String> formMap,
+                  String encoding,
+                  Map<String, String> reqHeader);
+
+
+
+    RespBean searchPoiNearby(String keyword, String longitude, String latitude);
+
+
+
+    RespBean getEleShop(long restaurant_id);
+
+    RespBean getCategory(Double latitude1, Double longitude1);
+
+    RespBean restaurants(String offset, String longitude, String latitude, String categoryIds);
+
+    /**
+     * 点评数据
+     * @param regionId
+     * @param timestamp
+     */
+    RespBean searchshop4Dp(int start , String cityId, String regionId,String categoryid, String timestamp);
 }

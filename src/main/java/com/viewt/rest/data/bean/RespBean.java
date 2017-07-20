@@ -7,7 +7,9 @@ import java.util.Map;
  * Created by Elijah on 7/6/2017.
  */
 public class RespBean {
+
     private String content;
+    private String reqUrl;
     private Map<String,String> cookies = new HashMap<>();
 
     public String getContent() {
@@ -24,5 +26,13 @@ public class RespBean {
 
     public void setCookies(Map<String, String> cookies) {
         this.cookies = cookies;
+    }
+
+    public String getReqUrl() {
+        return reqUrl;
+    }
+
+    public void setReqUrl(String reqUrl) {
+        this.reqUrl = reqUrl;
     }
 }

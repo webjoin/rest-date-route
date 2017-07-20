@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.bean.RespSelectBean;
 import com.viewt.rest.data.service.UrlService;
+import com.viewt.rest.data.util.JSONUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URLEncoder;
@@ -17,6 +18,24 @@ import java.util.regex.Pattern;
  * Created by Elijah on 7/7/2017.
  */
 public class UrlServiceImpl extends AbstractService implements UrlService {
+    @Override
+    public void testAbuyun() {
+        String url = "https://www.baidu.com/";
+        url = "http://www.163.com/";
+        url = "http://3g.163.com/touch/all?dataversion=A&version=v_standard";
+        String cookie = "";
+//        for (int i = 0; i < 50; i++) {
+//            try {
+//                RespBean respBean = null;//this.doGetRequest(url, cookie);
+//                System.out.println(i + "--" + respBean.getContent().substring(0, 300));
+//                System.out.println(i + "--" + respBean.getCookies().entrySet());
+//            } catch (Exception e) {
+//                System.out.println(i + "--" + e.getCause());
+//            }
+//
+//        }
+
+    }
 
 
     //    Logger
@@ -43,8 +62,8 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         url = "https://webapi.amap.com/maps?v=1.3&key=" + key;
         String keyValue = firstCookies.get("key");
         boolean existsKey = keyValue != null;
-        if (!existsKey){
-            logger.error("city_py:{}，city_id{} 's key is empty pls check!",city_py,city_id);
+        if (!existsKey) {
+            logger.error("city_py:{}，city_id{} 's key is empty pls check!", city_py, city_id);
         }
         url = url.replace(key, !existsKey ? "" : keyValue);
         respBean = get(url, encoding, reqHeader);
@@ -63,6 +82,12 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         }
     }
 
+    /**
+     * @param cityName
+     * @param keywords 美团
+     * @param respBean
+     * @return
+     */
     @Override
     public List<RespSelectBean> searchText(String cityName, String keywords, RespBean respBean) {
         Map<String, String> cookies = respBean.getCookies();
@@ -101,11 +126,70 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         if (i > -1) {
             content = content.substring(i + 1, ii);
         }
-        JSONObject jsonObject = parseObject(content);
+        JSONObject jsonObject = JSONUtil.parseObject(content);
         String pois = jsonObject.getString("pois");
         respBean1 = null;
-        List<RespSelectBean> respSelectBean = parseArray(pois, RespSelectBean.class);
+        List<RespSelectBean> respSelectBean = JSONUtil.parseArray(pois, RespSelectBean.class);
         return respSelectBean;
+    }
+
+    /**
+     * @param keyword Eleme keywork
+     */
+    @Override
+    public RespBean searchPoiNearby(String keyword, String longitude, String latitude) {
+        String eleKeywordsUrl = "https://mainsite-restapi.ele.me/bgs/poi/search_poi_nearby?keyword=${keyword}&offset=0&limit=20&longitude=${longitude}&latitude=${latitude}";
+        eleKeywordsUrl = eleKeywordsUrl.replace("${keyword}", keyword);
+        eleKeywordsUrl = eleKeywordsUrl.replace("${longitude}", longitude);
+        eleKeywordsUrl = eleKeywordsUrl.replace("${latitude}", latitude);
+        logger.info("{}，{}，{}", keyword, longitude, latitude);
+        RespBean respBean = this.get(eleKeywordsUrl, encoding, null);
+        return respBean;
+
+    }
+
+    /**
+     * @param restaurant_id Eleme
+     * @return
+     */
+    @Override
+    public RespBean getEleShop(long restaurant_id) {
+        String shopUrl = "https://mainsite-restapi.ele.me/shopping/v2/menu?restaurant_id=" + restaurant_id;
+        RespBean respBean = this.get(shopUrl, encoding, null);
+        return respBean;
+    }
+
+    /**
+     * Eleme
+     *
+     * @param offset
+     * @param shopLongitude
+     * @param shopLatitude
+     * @return
+     */
+    public RespBean restaurants(String offset, String shopLongitude, String shopLatitude, String categoryIds) {
+        String restaurantsUrl = "https://mainsite-restapi.ele.me/shopping/restaurants?latitude=${latitude}&longitude=${longitude}&keyword=&offset=${offset}&limit=30&extras[]=activities";
+        restaurantsUrl = restaurantsUrl.replace("${longitude}", shopLongitude);
+        restaurantsUrl = restaurantsUrl.replace("${latitude}", shopLatitude);
+        restaurantsUrl = restaurantsUrl.replace("${offset}", offset);
+        String[] split = categoryIds.split(",");
+        for (int i = 0; i < split.length; i++) {
+            restaurantsUrl += "&restaurant_category_ids[]=" + split[i];
+        }
+        RespBean respBean = this.get(restaurantsUrl, encoding, null);
+        if (respBean != null) {
+            respBean.setReqUrl(restaurantsUrl);
+        }
+        return respBean;
+    }
+
+    @Override
+    public RespBean getCategory(Double latitude, Double longitude) {
+        String restaurantsUrl = "https://mainsite-restapi.ele.me/shopping/v2/restaurant/category?latitude=${latitude}&longitude=${longitude}";
+        restaurantsUrl = restaurantsUrl.replace("${longitude}", String.valueOf(longitude));
+        restaurantsUrl = restaurantsUrl.replace("${latitude}", String.valueOf(latitude));
+        RespBean respBean = this.get(restaurantsUrl, encoding, null);
+        return respBean;
     }
 
     @Override
@@ -131,20 +215,21 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         String content = respBean1.getContent();
         JSONObject data = null;
         if (StringUtils.isNotEmpty(content)) {
-            JSONObject jsonObject = parseObject(content);
+            JSONObject jsonObject = JSONUtil.parseObject(content);
 //            removeOutterKeys(jsonObject);
-            data = getJSONObject(jsonObject, "data");
+            data = JSONUtil.getJSONObject(jsonObject, "data");
             removeOutterKeys(data);
             if (null == data) {
                 logger.error("{}:pageIndex:{}.data is null", w_addr, pageIndex); //logger
             } else {
-                JSONArray poilist = getJSONArray(data, "poilist");
+                JSONArray poilist = JSONUtil.getJSONArray(data, "poilist");
                 if (null == poilist || poilist.isEmpty()) {
                     logger.error("{}:pageIndex:{}.poi_has_next_page is not false but poilist is empty", w_addr, pageIndex); //logger
                 } else {
                     for (Object poi : poilist) {
                         JSONObject poiJson = (JSONObject) poi;
-                        String wm_poi_id = poiJson.getString("id");
+                        String
+                                wm_poi_id = poiJson.getString("id");
                         JSONObject shopJSON = getShop(wm_poi_id, _token, uuid, cookie);
 //                        System.out.println("{},page: " + pageIndex + "-->" + wm_poi_id + "-->" + (shopJSON == null),w_addr);
                         if (null == shopJSON) {
@@ -185,7 +270,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         shopJSON1.remove("shopping_cart");
         shopJSON1.remove("latest_bought");
 //        shopJSON1.remove("poi_info");
-        JSONObject poi_info = getJSONObject(shopJSON1, "poi_info");
+        JSONObject poi_info = JSONUtil.getJSONObject(shopJSON1, "poi_info");
         if (poi_info != null) {
             poi_info.remove("story_info");
             poi_info.remove("buz_type");
@@ -231,7 +316,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         shopJSON1.remove("container_operation_source");
         shopJSON1.remove("friend_status");
 //        shopJSON1.remove("food_spu_tags");
-        JSONArray food_spu_tags1 = getJSONArray(shopJSON1, "food_spu_tags");
+        JSONArray food_spu_tags1 = JSONUtil.getJSONArray(shopJSON1, "food_spu_tags");
         Iterator<Object> iterator2 = food_spu_tags1.iterator();
         while (iterator2.hasNext()) {
             JSONObject foodJSON = (JSONObject) iterator2.next();
@@ -249,7 +334,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
                 foodJSON.remove("sequence");
 //            foodJSON.remove("name" : "折扣",
 //            foodJSON.remove("spus" : [
-                JSONArray spus = getJSONArray(foodJSON, "spus");
+                JSONArray spus = JSONUtil.getJSONArray(foodJSON, "spus");
                 if (spus != null) {
                     Iterator<Object> iterator = spus.iterator();
                     while (iterator.hasNext()) {
@@ -270,7 +355,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
 //                   spusJSON.remove("praise_num_new" : NumberInt(0),
 //                   spusJSON.remove("name" : "麻辣小龙虾",
 //                    spusJSON.remove("tread_num");
-                        JSONArray skus = getJSONArray(spusJSON, "skus");
+                        JSONArray skus = JSONUtil.getJSONArray(spusJSON, "skus");
                         if (skus != null) {
                             Iterator<Object> iterator1 = skus.iterator();
                             while (iterator1.hasNext()) {
@@ -321,7 +406,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         jsonObject.remove("rank_strategy_tag");
         jsonObject.remove("remind_infos");
         jsonObject.remove("rank_strategy_version");
-        JSONArray poilist = getJSONArray(jsonObject, "poilist");
+        JSONArray poilist = JSONUtil.getJSONArray(jsonObject, "poilist");
         if (null == poilist) return;
         Iterator<Object> iterator = poilist.iterator();
         while (iterator.hasNext()) {
@@ -394,11 +479,11 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         reqHeader.put("Cookie", cookies.toString());
         reqHeader.put("User-Agent", userAgent);
         RespBean shopCookieInfo = post(url.toString(), reqParamMap, encoding, reqHeader);
-        JSONObject shopCookieJSON = parseObject(shopCookieInfo.getContent());
+        JSONObject shopCookieJSON = JSONUtil.parseObject(shopCookieInfo.getContent());
         if (null == shopCookieJSON) {
             shopCookieJSON = new JSONObject();
         }
-        JSONObject shopCookieDataJSON = getJSONObject(shopCookieJSON, "data");
+        JSONObject shopCookieDataJSON = JSONUtil.getJSONObject(shopCookieJSON, "data");
         if (shopCookieDataJSON == null) {
             shopCookieDataJSON = new JSONObject();
         }
@@ -414,7 +499,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
             if (StringUtils.isEmpty(content)) {
                 logger.error("the content of the shop detail is empty");
             } else {
-                JSONObject shopInfoJson = parseObject(content);
+                JSONObject shopInfoJson = JSONUtil.parseObject(content);
                 JSONObject shopInfoKeys = getShopInfoKeys(shopInfoJson);
 
                 if (shopCookieDataJSON != null) {
@@ -426,63 +511,13 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         return shopCookieJSON;
     }
 
-    /**
-     * 获取json对象
-     *
-     * @param jsonObject
-     * @param key
-     * @return
-     */
-    private JSONObject getJSONObject(JSONObject jsonObject, String key) {
-        if (jsonObject == null) {
-            return new JSONObject();
-        }
-        try {
-            return jsonObject.getJSONObject(key);
-        } catch (Exception e) {
-            return new JSONObject();
-        }
-    }
-
-    private JSONObject parseObject(String content) {
-        if (StringUtils.isEmpty(content)) {
-            return new JSONObject();
-        }
-        try {
-            return JSON.parseObject(content);
-        } catch (Exception e) {
-            return new JSONObject();
-        }
-    }
-
-    private <T> List<T> parseArray(String content, Class<T> clazz) {
-        if (StringUtils.isEmpty(content)) {
-            return new ArrayList<>();
-        }
-        try {
-            return JSON.parseArray(content, clazz);
-        } catch (Exception e) {
-            return new ArrayList<>();
-        }
-    }
-
-    private JSONArray getJSONArray(JSONObject origionJON, String key) {
-        if (null == origionJON) {
-            return new JSONArray();
-        }
-        try {
-            return origionJON.getJSONArray(key);
-        } catch (Exception e) {
-            return new JSONArray();
-        }
-    }
 
     private JSONObject getShopInfoKeys(JSONObject shopInfoJson) {
         if (shopInfoJson == null) {
             return null;
         }
         JSONObject rsJSON = new JSONObject();
-        JSONObject data = getJSONObject(shopInfoJson, "data");
+        JSONObject data = JSONUtil.getJSONObject(shopInfoJson, "data");
         if (data == null) {
             return rsJSON;
         }
@@ -503,5 +538,20 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         rsJSON.put(wm_poi_score, data.getLong(wm_poi_score));
         shopInfoJson = null;
         return rsJSON;
+    }
+
+
+    @Override
+    public RespBean searchshop4Dp(int start , String cityId, String regionId,String categoryid, String timestamp) {
+        String dpUrl = "https://mapi.dianping.com/searchshop.json?start=${start}&regionid=${region}&categoryid=${categoryid}&sortid=0&locatecityid=${cityId}&maptype=0&cityid=${cityId}&_=${timestamp}&callback=Zepto${timestamp}";
+//      String dpUrl = "https://mapi.dianping.com/searchshop.json?start=0&regionid=1839&categoryid=10&sortid=0&locatecityid=15&maptype=0&cityid=15&_=1500353442538&callback=Zepto1500353427712";
+
+        dpUrl = dpUrl.replace("${region}", regionId);
+        dpUrl = dpUrl.replace("${categoryid}", categoryid);
+        dpUrl = dpUrl.replace("${cityId}", cityId);
+        dpUrl = dpUrl.replace("${timestamp}", timestamp);
+        dpUrl = dpUrl.replace("${start}", start+"");
+        RespBean respBean = this.get(dpUrl, encoding, null);
+        return respBean;
     }
 }

@@ -1,6 +1,7 @@
 package com.viewt.rest;
 import com.alibaba.fastjson.JSON;
 import com.viewt.rest.data.util.DpCons;
+import com.viewt.rest.data.util.FileUtil;
 import com.viewt.rest.data.util.HttpUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Elijah on 26/1/2017.
  */
-public class BaseAbstractBootstrap extends DbBootstrap {
+public class BaseAbstractBootstrap {
 
     protected Logger logger = LogManager.getLogger(this.getClass());
     protected int timeout = 5 * 1000;
@@ -294,48 +295,9 @@ public class BaseAbstractBootstrap extends DbBootstrap {
      * @return
      */
     protected List<String> readFile(String path) {
-        return readFile(path, null);
+        return FileUtil.readFile(path, null);
     }
 
-    protected List<String> readFile(String path, String prefix) {
-        List<String> list = new ArrayList<>();
-        InputStreamReader fr = null;
-        BufferedReader br = null;
-        try {
-            fr = new InputStreamReader(new FileInputStream(path), "utf-8");
-            br = new BufferedReader(fr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (prefix == null) {
-                    list.add(line);
-                } else {
-                    int ix = line.indexOf(prefix);
-                    if (ix > -1) {
-                        list.add(line.substring(ix));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fr != null) {
-                try {
-                    fr.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return list;
-    }
 
     static int stastic = 0;
     static long sStastic = 0;

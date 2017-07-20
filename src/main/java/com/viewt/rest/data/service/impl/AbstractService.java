@@ -4,20 +4,41 @@ import com.alibaba.fastjson.JSON;
 import com.viewt.rest.data.bean.RespBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -27,14 +48,140 @@ import java.util.concurrent.TimeUnit;
 public class AbstractService {
     protected org.slf4j.Logger logger = LoggerFactory.getLogger(UrlServiceImpl.class);
 
-    protected String encoding = "utf-8";
-    protected String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
+    protected static String encoding = "utf-8";
+    protected static String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
+    // 代理服务器
+    final static String proxyHost = "proxy.abuyun.com";
+    final static Integer proxyPort = 9020;
+    // 代理隧道验证信息
+    final static String proxyUser = "HJ9W1Y72W50MHNID";
+    final static String proxyPass = "08E1EA3749F6003F";
+
+    // IP切换协议头
+    final static String switchIpHeaderKey = "Proxy-Switch-Ip";
+    final static String switchIpHeaderVal = "yes";
 
     public RespBean get(String url,
                         String encoding,
                         Map<String, String> reqHeader) {
         return getRespBean("get", url, null, reqHeader);
     }
+
+//    private static PoolingHttpClientConnectionManager cm = null;
+//    private static HttpHost proxy = null;
+
+    //    private static CredentialsProvider credsProvider = null;
+//    private static RequestConfig reqConfig = null;
+    protected static int timeout = 5 * 1000;
+
+//    static {
+//        ConnectionSocketFactory plainsf = PlainConnectionSocketFactory.getSocketFactory();
+//        LayeredConnectionSocketFactory sslsf = SSLConnectionSocketFactory.getSocketFactory();
+//
+//        Registry registry = RegistryBuilder.create()
+//                .register("http", plainsf)
+//                .register("https", sslsf)
+//                .build();
+//
+//        cm = new PoolingHttpClientConnectionManager(registry);
+//        cm.setMaxTotal(20);
+//        cm.setDefaultMaxPerRoute(5);
+//
+//        proxy = new HttpHost(proxyHost, proxyPort, "http");
+//
+//        credsProvider = new BasicCredentialsProvider();
+//        credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(proxyUser, proxyPass));
+//
+//        reqConfig = RequestConfig.custom()
+//                .setConnectionRequestTimeout(timeout)
+//                .setConnectTimeout(timeout)
+//                .setSocketTimeout(timeout)
+//                .setExpectContinueEnabled(false)
+//                .setProxy(new HttpHost(proxyHost, proxyPort))
+//                .build();
+//    }
+
+//    private RespBean doRequest(HttpRequestBase httpReq, String cookie) {
+//        CloseableHttpClient httpClient = null;
+//        CloseableHttpResponse httpResp = null;
+//        RespBean respBean = new RespBean();
+//        try {
+//            httpReq.setHeader("Accept-Encoding", null);
+//            httpReq.setHeader(switchIpHeaderKey, switchIpHeaderVal);
+//            if (StringUtils.isNotEmpty(cookie))
+//                httpReq.setHeader("Cookie", cookie);
+//            httpReq.setHeader("User-Agent", userAgent);
+//
+//
+//            httpReq.setConfig(reqConfig);
+//
+//            httpClient = HttpClients.custom()
+//                    .setConnectionManager(cm)
+//                    .setDefaultCredentialsProvider(credsProvider)
+//                    .build();
+//
+//            AuthCache authCache = new BasicAuthCache();
+//            authCache.put(proxy, new BasicScheme());
+//
+//            HttpClientContext localContext = HttpClientContext.create();
+//            localContext.setAuthCache(authCache);
+//
+//            httpResp = httpClient.execute(httpReq, localContext);
+//
+////            int statusCode = httpResp.getStatusLine().getStatusCode();
+////            System.out.println(statusCode);
+//            parseHttpResponse(respBean, httpResp);
+//        } catch (Exception e) {
+//            exceptionHandle(e, httpReq.getURI().getPath(), timeout);
+//        } finally {
+//            try {
+//                if (httpResp != null) {
+//                    httpResp.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                if (httpClient != null) {
+//                    httpClient.close();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return respBean;
+//    }
+
+
+//    protected RespBean doPostRequest(String url, Map<String, String> reqParamMap, String cookie) throws Exception {
+//        HttpPost httpPost;
+//        try {
+//            // 要访问的目标页面
+//            httpPost = new HttpPost(url);
+//
+//            // 设置表单参数
+//            List<BasicNameValuePair> params = new ArrayList();
+//            Set<Map.Entry<String, String>> entries = reqParamMap.entrySet();
+//            for (Map.Entry<String, String> entry : entries) {
+//                params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+//            }
+//            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, encoding);
+//            httpPost.setEntity(entity);
+//            return doRequest(httpPost, cookie);
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
+
+//    protected RespBean doGetRequest(String url, String cookie) {
+//        // 要访问的目标页面
+//        try {
+//            HttpGet httpGet = new HttpGet(url);
+//            return doRequest(httpGet, cookie);
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
 
     private RespBean get(String url,
                          Map<String, String> reqHeader) {
@@ -59,7 +206,7 @@ public class AbstractService {
             CloseableHttpResponse httpResponse = client.execute(httpGet);
             parseHttpResponse(respBean, httpResponse);
         } catch (Exception e) {
-            exceptionHandle(e,url,timeout);
+            exceptionHandle(e, url, timeout);
         } finally {
             try {
                 client.close();
@@ -69,9 +216,11 @@ public class AbstractService {
         }
         return respBean;
     }
+
     private static void exceptionHandle(Exception e, String url, int timeOut) {
         throw new RuntimeException("invoke fail server address : " + url + ", timeout : " + timeOut + " , type : " + e.getClass() + " , cause : " + e.getMessage());
     }
+
     private void parseHttpResponse(RespBean respBean, CloseableHttpResponse httpResponse) throws IOException {
         String response;
         try {
@@ -90,11 +239,13 @@ public class AbstractService {
             response = EntityUtils.toString(httpResponse.getEntity(), encoding);
             respBean.setContent(response);
             respBean.setCookies(cookies);
+            logger.error("testing ... : {}", httpResponse.getStatusLine().getStatusCode());
         } finally {
             httpResponse.close();
         }
     }
-    protected int timeout = 5 * 1000;
+
+
     protected long sleep = 500;
 
     protected void sleep(long sleep1) {
@@ -124,20 +275,21 @@ public class AbstractService {
 
     }
 
-    protected RespBean post(String url,
-                            Map<String, String> formMap,
-                            String encoding,
-                            Map<String, String> reqHeader) {
+    public RespBean post(String url,
+                         Map<String, String> formMap,
+                         String encoding,
+                         Map<String, String> reqHeader) {
 
         return getRespBean("post", url, formMap, reqHeader);
     }
+
 
     private RespBean getRespBean(String method, String url,
                                  Map<String, String> formMap, /* if get , is null */
                                  Map<String, String> reqHeader) {
         plus();
         int flag = 10;
-        String resp = null;
+        String resp = "";
         boolean hasException = false;
         RespBean respBean = null;
         do {
@@ -171,26 +323,42 @@ public class AbstractService {
                     } else if (resp.contains("403 Forbidden")) {
 //                        handle403ForCookie();
                         throw new RuntimeException("403 Forbidden");
-                    }else if (resp.contains("该页面暂时无法访问，请稍后再试")){
+                    } else if (resp.contains("该页面暂时无法访问，请稍后再试")) {
                         sleep(timeout);
                         throw new RuntimeException("该页面暂时无法访问，请稍后再试  应该是被美团封IP了 请切换IP");
-                    }else if(resp.contains("Operation timed out")){
+                    } else if (resp.contains("Operation timed out")) {
                         throw new RuntimeException("Operation timed out");
-                    }else {
+                    } else if (resp.contains("操作太频繁啦")) {
+                        sleep(1000);
+                        throw new RuntimeException("操作太频繁啦");
+                    } else {
                         hasException = false;
                     }
+                } else {
+                    logger.error("req {} is empty", url);
+                    resp = "";
                 }
                 break;//正常情况下直接退出
             } catch (Exception e) {
                 hasException = true;
-                if (StringUtils.isNotEmpty(resp))
-                    logger.error("seq {} url:[{}] break - {} - {}", flag--, url, e.getMessage(), resp.substring(0, 10));
-                else {
+                if (StringUtils.isNotEmpty(resp)) {
+                    String val;
+                    if (resp.length() > 10) val = resp.substring(0, 10);
+                    else {
+                        val = resp;
+                    }
+                    logger.error("seq {} url:[{}] break - {} - {}", flag--, url, e.getMessage(), val);
+                } else {
                     logger.error("seq {} url:[{}] break - {}", flag--, url, e.getMessage());
                 }
             } finally {
                 if (!hasException) {
-                    logger.error("url:{} ctx:{}", url, resp.substring(0, 10));
+                    String val;
+                    if (resp.length() > 10) val = resp.substring(0, 10);
+                    else {
+                        val = resp;
+                    }
+                    logger.error("url:{} ctx:{}", url, val);
                 }
             }
         } while (flag >= 0);
@@ -232,7 +400,7 @@ public class AbstractService {
             CloseableHttpResponse httpResponse = client.execute(httpPost);
             parseHttpResponse(respBean, httpResponse);
         } catch (Exception e) {
-            exceptionHandle(e,url,timeout);
+            exceptionHandle(e, url, timeout);
         } finally {
             try {
                 client.close();
