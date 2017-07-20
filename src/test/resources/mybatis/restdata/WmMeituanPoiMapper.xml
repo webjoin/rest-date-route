@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.WmMeituanPoiMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.WmMeituanPoi">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="w_addr" jdbcType="VARCHAR" property="wAddr" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="poi_total_num" jdbcType="INTEGER" property="poiTotalNum" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="cityname" jdbcType="VARCHAR" property="cityname" />
+    <result column="adname" jdbcType="VARCHAR" property="adname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, w_addr, address, poi_total_num, pname, longitude, latitude, cityname, adname
+  </sql>
+
+  <insert id="insertWmPoi" parameterType="com.viewt.rest.entity.restdata.WmMeituanPoi" keyProperty="id" useGeneratedKeys="true" >
+
+       INSERT INTO wm_meituan_poi(
+       w_addr, address,   poi_total_num, pname,   longitude,  latitude,  cityname,  adname)
+    VALUES (
+      #{wAddr},#{address},#{poiTotalNum},#{pname},#{longitude},#{latitude},#{cityname},#{adname}
+    )
+  </insert>
+
+  <select id="selectWmPoiBylng" resultType="int"  >
+
+      select id from wm_meituan_poi where longitude = #{longitude} and latitude = #{latitude} and w_addr = #{w_addr}
+
+  </select>
+
+</mapper>

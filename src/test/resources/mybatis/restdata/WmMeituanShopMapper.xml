@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.WmMeituanShopMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.WmMeituanShop">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sales" jdbcType="INTEGER" property="sales" />
+    <result column="support_coupon" jdbcType="INTEGER" property="supportCoupon" />
+    <result column="avg_delivery_time" jdbcType="INTEGER" property="avgDeliveryTime" />
+    <result column="wm_poi_view_id" jdbcType="VARCHAR" property="wmPoiViewId" />
+    <result column="distance" jdbcType="VARCHAR" property="distance" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="mt_poi_id" jdbcType="VARCHAR" property="mtPoiId" />
+    <result column="month_sale_num" jdbcType="INTEGER" property="monthSaleNum" />
+    <result column="shipping_time_x" jdbcType="VARCHAR" property="shippingTimeX" />
+    <result column="min_price" jdbcType="DOUBLE" property="minPrice" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="shipping_fee" jdbcType="DOUBLE" property="shippingFee" />
+    <result column="phone_list" jdbcType="VARCHAR" property="phoneList" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="brand_type" jdbcType="INTEGER" property="brandType" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="wm_poi_score" jdbcType="INTEGER" property="wmPoiScore" />
+    <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
+    <result column="comment_number" jdbcType="INTEGER" property="commentNumber" />
+    <result column="invoice_support" jdbcType="TINYINT" property="invoiceSupport" />
+    <result column="support_pay" jdbcType="TINYINT" property="supportPay" />
+    <result column="shipping_time" jdbcType="VARCHAR" property="shippingTime" />
+    <result column="mt_search_poi_id" jdbcType="BIGINT" property="mtSearchPoiId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, sales, support_coupon, avg_delivery_time, wm_poi_view_id, distance, longitude, 
+    mt_poi_id, month_sale_num, shipping_time_x, min_price, name, shipping_fee, phone_list, 
+    address, brand_type, latitude, wm_poi_score, comment_num, comment_number, invoice_support, 
+    support_pay, shipping_time, mt_search_poi_id
+  </sql>
+
+
+  <insert id="insertShop" parameterType="com.viewt.rest.entity.restdata.WmMeituanShop" >
+
+    insert into wm_meituan_shop(<include refid="Base_Column_List" />) values(
+    #{id},
+    #{sales},
+    #{supportCoupon},
+    #{avgDeliveryTime},
+    #{wmPoiViewId},
+    #{distance},
+    #{longitude},
+    #{mtPoiId},
+    #{monthSaleNum},
+    #{shippingTimeX},
+    #{minPrice},
+    #{name},
+    #{shippingFee},
+    #{phoneList},
+    #{address},
+    #{brandType},
+    #{latitude},
+    #{wmPoiScore},
+    #{commentNum},
+    #{commentNumber},
+    #{invoiceSupport},
+    #{supportPay},
+    #{shippingTime},
+    #{mtSearchPoiId}
+
+    )
+  </insert>
+
+  <insert id="insertShops" parameterType="com.viewt.rest.entity.restdata.WmMeituanShop" >
+
+    insert into wm_meituan_shop(<include refid="Base_Column_List" />) values
+    <foreach collection="list" item="shop" index="index" separator=",">
+      (
+          #{shop.id},
+          #{shop.sales},
+          #{shop.supportCoupon},
+          #{shop.avgDeliveryTime},
+          #{shop.wmPoiViewId},
+          #{shop.distance},
+          #{shop.longitude},
+          #{shop.mtPoiId},
+          #{shop.monthSaleNum},
+          #{shop.shippingTimeX},
+          #{shop.minPrice},
+          #{shop.name},
+          #{shop.shippingFee},
+          #{shop.phoneList},
+          #{shop.address},
+          #{shop.brandType},
+          #{shop.latitude},
+          #{shop.wmPoiScore},
+          #{shop.commentNum},
+          #{shop.commentNumber},
+          #{shop.invoiceSupport},
+          #{shop.supportPay},
+          #{shop.shippingTime},
+          #{shop.mtSearchPoiId}
+      )
+    </foreach>
+
+  </insert>
+
+</mapper>

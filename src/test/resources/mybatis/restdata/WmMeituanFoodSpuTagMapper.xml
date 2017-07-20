@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.WmMeituanFoodSpuTagMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.WmMeituanFoodSpuTag">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="tag" jdbcType="INTEGER" property="tag" />
+    <result column="activity_tag" jdbcType="VARCHAR" property="activityTag" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    tag, activity_tag, name
+  </sql>
+</mapper>

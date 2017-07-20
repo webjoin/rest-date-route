@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.WmMeituanSkuMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.WmMeituanSku">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="origin_price" jdbcType="DOUBLE" property="originPrice" />
+    <result column="box_num" jdbcType="DOUBLE" property="boxNum" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="box_price" jdbcType="DOUBLE" property="boxPrice" />
+    <result column="spu_id" jdbcType="BIGINT" property="spuId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, origin_price, box_num, picture, price, stock, box_price, spu_id
+  </sql>
+</mapper>

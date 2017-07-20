@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.WmMeituanFoodSpuMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.WmMeituanFoodSpu">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="praise_num" jdbcType="INTEGER" property="praiseNum" />
+    <result column="month_saled" jdbcType="INTEGER" property="monthSaled" />
+    <result column="tread_num" jdbcType="INTEGER" property="treadNum" />
+    <result column="tag" jdbcType="BIGINT" property="tag" />
+    <result column="min_price" jdbcType="DOUBLE" property="minPrice" />
+    <result column="praise_num_new" jdbcType="INTEGER" property="praiseNumNew" />
+    <result column="activity_tag" jdbcType="INTEGER" property="activityTag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, name, praise_num, month_saled, tread_num, tag, min_price, praise_num_new, activity_tag
+  </sql>
+</mapper>
