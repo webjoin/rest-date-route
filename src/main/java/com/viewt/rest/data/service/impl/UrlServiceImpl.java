@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.bean.RespSelectBean;
 import com.viewt.rest.data.service.UrlService;
+import com.viewt.rest.data.util.CodeUtil;
 import com.viewt.rest.data.util.JSONUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -74,13 +75,6 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         return respBean;
     }
 
-    private String encode(String encode) {
-        try {
-            return URLEncoder.encode(encode, "utf-8");
-        } catch (Exception e) {
-            return "";
-        }
-    }
 
     /**
      * @param cityName
@@ -98,18 +92,18 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         url.append("s").append("=").append("rsv3");
         url.append("&children").append("=").append("");
         url.append("&key").append("=").append(key);
-        url.append("&types").append("=").append(encode("商务住宅|学校信息|生活服务|公司企业|餐饮服务|购物服务|住宿服务|交通设施服务|娱乐场所|医院类型|银行类型|风景名胜|科教文化服务|汽车服务"));
+        url.append("&types").append("=").append(CodeUtil.urlEecode("商务住宅|学校信息|生活服务|公司企业|餐饮服务|购物服务|住宿服务|交通设施服务|娱乐场所|医院类型|银行类型|风景名胜|科教文化服务|汽车服务"));
         url.append("&offset").append("=").append("10");
-        url.append("&city").append("=").append(encode(cityName));
+        url.append("&city").append("=").append(CodeUtil.urlEecode(cityName));
         url.append("&page").append("=").append("1");
         url.append("&language").append("=").append("zh_cn");
         url.append("&callback").append("=").append("jsonp_313964_");
         url.append("&platform").append("=").append("JS");
         url.append("&logversion").append("=").append("2.0");
         url.append("&sdkversion").append("=").append("1.3");
-        url.append("&appname").append("=").append(encode("http://i.waimai.meituan.com/xiamen?city_id=350200"));
+        url.append("&appname").append("=").append(CodeUtil.urlEecode("http://i.waimai.meituan.com/xiamen?city_id=350200"));
         url.append("&csid").append("=").append("F9AD8DE6-9C65-4E91-A551-B42E4B6E4772");
-        url.append("&keywords").append("=").append(encode(keywords));
+        url.append("&keywords").append("=").append(CodeUtil.urlEecode(keywords));
 
         Map<String, String> reqHeader = new HashMap<>();
 
@@ -145,7 +139,12 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         logger.info("{}，{}，{}", keyword, longitude, latitude);
         RespBean respBean = this.get(eleKeywordsUrl, encoding, null);
         return respBean;
+    }
 
+    @Override
+    public RespBean getContentByUrl(String url,Map<String,String> header) {
+        RespBean respBean = this.get(url, encoding, header);
+        return respBean;
     }
 
     /**

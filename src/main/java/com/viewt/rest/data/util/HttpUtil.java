@@ -219,80 +219,14 @@ public class HttpUtil {
      * @param url
      * @return
      */
-    public static Header[] getHeaders(String url) {
-        return get(url, null, null);
-    }
 
-    public static String get(String url) {
-        return get(url, "utf-8", null, null);
-    }
 
-    public static String get(String url, Integer null1, Integer null2, String cookies) {
-        return get(url, "utf-8", null, null, TIME_OUT, cookies);
-    }
 
     public static String get(String url, int timeoutMiniSeconds) {
         return get(url, "utf-8", null, null, timeoutMiniSeconds);
     }
 
 
-    public static String get1(String url, int timeoutMiniSeconds) {
-        StringBuffer result = new StringBuffer();
-        BufferedReader in = null;
-        HttpURLConnection connection = null;
-        try {
-//            String urlNameString =param==null ? url: url + "?" + getParam(param);
-            URL realUrl = new URL(url);
-
-            // 打开和URL之间的连接
-            connection = (HttpURLConnection) realUrl.openConnection();
-            // 设置通用的请求属性
-            connection.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-            connection.setRequestProperty("connection", "Keep-Alive");
-//            connection.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            connection.setRequestProperty("User-Agent", userAgents[random.nextInt(userAgents.length)]);
-
-            connection.setReadTimeout(timeoutMiniSeconds);
-            connection.setConnectTimeout(timeoutMiniSeconds);
-            // 建立实际的连接
-            connection.connect();
-            // 获取所有响应头字段
-//            Map<String, List<String>> map = connection.getHeaderFields();
-            // 遍历所有的响应头字段
-//            for (String key : map.keySet()) {
-//                System.out.println(key + "--->" + map.get(key));
-//            }
-            // 定义 BufferedReader输入流来读取URL的响应
-            logger.info("url:{} status:{}", url, connection.getResponseCode());
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result.append(line);
-            }
-//            logger.error("url:{} ctx:{}",url,result.substring(0,100));
-        } catch (Exception e) {
-            logger.error(" error --> to get {} the info of {} timeout", url, e.getMessage(), timeoutMiniSeconds);
-            exceptionHandle(e, url, timeoutMiniSeconds);
-        }
-        // 使用finally块来关闭输入流
-        finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                exceptionHandle(e2, " [close ex] " + url, timeoutMiniSeconds);
-            }
-            if (null != connection) {
-                connection.disconnect();
-            }
-        }
-        return result.toString();
-    }
-
-    public static String get(String url, String encoding) {
-        return get(url, encoding, null, null);
-    }
 
     public static String post(String url, String postData, String mediaType, String encoding,
                               Header[] headers, String proxyHost, Integer proxyPort) {
