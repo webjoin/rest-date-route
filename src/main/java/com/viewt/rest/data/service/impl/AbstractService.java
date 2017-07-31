@@ -192,7 +192,7 @@ public class AbstractService {
             RequestConfig config = RequestConfig.custom()
                     .setConnectTimeout(timeout)
                     .setSocketTimeout(timeout)
-                    .setCookieSpec(CookieSpecs.DEFAULT)
+                    .setCookieSpec(CookieSpecs.STANDARD)
                     .setConnectionRequestTimeout(timeout)
                     .build();
             httpGet.setConfig(config);
@@ -270,7 +270,7 @@ public class AbstractService {
 
         long val = (System.currentTimeMillis() - sStastic) / 1000;  //s
         if (val > 1) {
-            logger.info("--->>-->>>>" + stastic + "/" + val + "     " + (((double) stastic) / val) + "/1s");
+            logger.error("--->>-->>>>" + stastic + "/" + val + "     " + (((double) stastic) / val) + "/1s");
         }
 
     }
@@ -321,7 +321,7 @@ public class AbstractService {
                         sleep(1 * 1000);
                         throw new RuntimeException("forbidden");
                     } else if (resp.contains("403 Forbidden")) {
-//                        handle403ForCookie();
+                        handle403ForCookie(url);
                         throw new RuntimeException("403 Forbidden");
                     } else if (resp.contains("该页面暂时无法访问，请稍后再试")) {
                         sleep(timeout);
@@ -364,6 +364,19 @@ public class AbstractService {
         } while (flag >= 0);
         if (null == resp) resp = "";
         return respBean;
+    }
+
+    private void handle403ForCookie(String url) {
+        if (url.contains("dianping.com")){
+//            try {
+//                logger.info("sleeping 10s");
+//                TimeUnit.SECONDS.sleep(10);
+//                logger.info("sleeping 10s pass");
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            this.get(DpCons.BASE_URL);
+        }
     }
 
     private RespBean post(String url,

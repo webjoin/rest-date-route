@@ -33,8 +33,8 @@ public class ElemeBootstrap {
         int end = 0;
         if (args.length == 0) {
             String st = "";
-            for (int i = 0; i < WaimaiBootstrap.shopArea.length; i++) {
-                st += i + ":" + WaimaiBootstrap.shopArea[i] + "  ";
+            for (int i = 0; i < WaimaiBootstrap.shopArea1.length; i++) {
+                st += i + ":" + WaimaiBootstrap.shopArea1[i] + "  ";
             }
             logger.error("{}", st);
             logger.error("请输入前面的编号哦。pls!");
@@ -75,7 +75,7 @@ public class ElemeBootstrap {
         String latitude = citys[0][2];
         for (int i = start; i <= end; i++) {
             dc_index = i;
-            String keyword = WaimaiBootstrap.shopArea[i];
+            String keyword = WaimaiBootstrap.shopArea1[i];
             Log4jUtil.reconfigure(String.valueOf(i));
             RespBean respPoiBean = urlService.searchPoiNearby(keyword, longitude, latitude);
             List<RespElemeSelectBean> selectBeans = getSelectBeans(keyword, respPoiBean);
@@ -93,7 +93,7 @@ public class ElemeBootstrap {
                 continue;
             }
             Map<Integer, Integer> qtyCategoryIds = getQtyCategoryIds(latitude1, longitude1, beans);
-            logger.info(categoryBean.getContent());
+//            logger.info(categoryBean.getContent());
             Set<Map.Entry<Integer, Integer>> entries = qtyCategoryIds.entrySet();
             for (Map.Entry<Integer, Integer> entry : entries) {
                 logger.error("{} , 分类ID:" + entry.getKey() + "----------分类店：" + entry.getValue(),dc_index);

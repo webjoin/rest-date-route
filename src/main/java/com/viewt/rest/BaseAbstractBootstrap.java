@@ -1,6 +1,6 @@
 package com.viewt.rest;
 import com.alibaba.fastjson.JSON;
-import com.viewt.rest.data.util.DpCons;
+import com.viewt.rest.data.util.Cons;
 import com.viewt.rest.data.util.FileUtil;
 import com.viewt.rest.data.util.HttpUtil;
 import org.apache.commons.collections.CollectionUtils;
@@ -21,7 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -354,7 +357,7 @@ public class BaseAbstractBootstrap {
                         sleep(1 * 1000);
                         throw new RuntimeException("forbidden");
                     } else if (resp.contains("403 Forbidden")) {
-                        handle403ForCookie();
+//                        handle403ForCookie();
                         throw new RuntimeException("403 Forbidden");
                     } else {
                         hasException = false;
@@ -390,13 +393,13 @@ public class BaseAbstractBootstrap {
 
     private void handle403ForCookie() {
         try {
-            logger.info("sleeping 10s");
-            TimeUnit.SECONDS.sleep(10);
-            logger.info("sleeping 10s pass");
+            logger.info("sleeping 1s");
+            TimeUnit.SECONDS.sleep(1);
+            logger.info("sleeping 1s pass");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        this.get(DpCons.BASE_URL);
+        this.get(Cons.DP_BASE_URL);
     }
 
     long timestamp1 = 0;

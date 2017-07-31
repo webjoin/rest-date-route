@@ -54,6 +54,13 @@ public class GenerateBeans extends BaseDBTest {
         System.setProperty("table_name","wm_meituan_sku");  //依据数据的表
         System.setProperty("bean_name","WmMeituanSku"); //生成的类名
 
+        System.setProperty("table_name","dp_category");  //依据数据的表
+        System.setProperty("bean_name","DpCategoryBean"); //生成的类名
+
+
+        System.setProperty("table_name","dp_region");  //依据数据的表
+        System.setProperty("bean_name","DpRegionBean"); //生成的类名
+
 
 
         System.setProperty("url", "jdbc:mysql://127.0.0.1:3306/"+ds+"?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull");

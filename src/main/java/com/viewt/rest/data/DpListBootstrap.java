@@ -3,10 +3,12 @@ package com.viewt.rest.data;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.viewt.rest.BaseBootstrap;
 import com.viewt.rest.WaimaiBootstrap;
 import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.service.UrlService;
 import com.viewt.rest.data.service.impl.UrlServiceImpl;
+import com.viewt.rest.data.util.Cons;
 import com.viewt.rest.data.util.FileUtil;
 import com.viewt.rest.data.util.JSONUtil;
 import com.viewt.rest.data.util.TimeUtil;
@@ -14,6 +16,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,35 +25,45 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Elijah on 18/7/2017.
+ * 点评列表数据  明细通过 另外一个类处理
+ * -Darea=dp-shop-list
+ * 1 198 9
+ * 城市 (菜系分类)category  (商圈)region
  */
-public class DpBootstrap {
+public class DpListBootstrap extends BaseBootstrap {
 
-    static String categoryId = "102;103;104;106;107;110;111;112,-3613;112,1831;112,1832;112,1833;112,1834;112,1835;112,1836;112,1837;112,1838;112,1839;112,1840;112,8085;112,8373;112,8374;112,8375;112,15652;112,27090;112,28549;112,28887;112,1847;112,1846;112,1830;112,15651;112,1842;112,8087;112,15650;112,27464;112,1843;112,65208;112,70185;112,27090;112,70208;112,15649;112,27054;112,1845;112,1844;112,70523;112,70175;112,106;112,107;112,108;112,109;114;115;116;117,-3613;117,104;117,105;117,106;117,107;117,108;117,109;118,-3613;118,104;118,105;118,106;118,107;118,108;118,109;132;219;224;247;249;250;251;508;733;1338;1783;1817";
-    static Logger logger = LoggerFactory.getLogger(DpBootstrap.class);
+    static Logger logger = LoggerFactory.getLogger(DpListBootstrap.class);
 
     public static void main(String[] args) {
-        DpBootstrap bootstrap = new DpBootstrap();
-//        bootstrap.crawl1(args);
-        bootstrap.crawl();
+        DpListBootstrap bootstrap = new DpListBootstrap();
+        bootstrap.start(args);
 
     }
 
-    private void crawl1(String[] args) {
+    private void calculate(String fileName) {
+        String filePath = System.getProperty("user.dir") + "/mate/" + fileName;
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new IllegalArgumentException(filePath + " is not exist , pls check it ");
+        }
+
+
+    }
+
+    private void calculate(String[] args) {
         if (args.length == 0) {
             System.out.println("参数不能为空");
             System.exit(1);
         }
 
-        String cityId;
-        cityId = WaimaiBootstrap.dp_cityIds[0];  //
-
+        String cityId = args[0];
         String regionId = "0";
         String categoryid = "10";
-        if (args.length >= 1) {
-            categoryid = args[0];
-        }
         if (args.length >= 2) {
-            regionId = args[1];
+            categoryid = args[1];
+        }
+        if (args.length >= 3) {
+            regionId = args[2];
         }
 
         String timestamp = System.currentTimeMillis() + "";
@@ -84,47 +98,129 @@ public class DpBootstrap {
     JSONArray regionNavs;
     JSONArray categoryNavs;
 
-    void crawl() {
+    public void crawl(String[] args) {
 
 
-        String userDir = System.getProperty("user.dir");
-        String dpJonsFilePath = userDir + "/mate/dp-xm.json";
-               dpJonsFilePath = userDir + "/mate/dp-sh.json";
-//        dpJonsFilePath = "/Users/Elijah/Desktop/self/rest-date-route/src/main/resources/dp-sh.json";
-        List<String> list = FileUtil.readFile(dpJonsFilePath);
-        String dpJsonText = StringUtils.join(list.toArray(new String[list.size()]), "");
-        JSONObject jsonObject = JSON.parseObject(dpJsonText);
-        String cityId = WaimaiBootstrap.dp_cityIds[0];
-        cityId = WaimaiBootstrap.dp_cityIds[1];  //
-        regionNavs = jsonObject.getJSONArray("regionNavs");
-        categoryNavs = jsonObject.getJSONArray("categoryNavs");
-        Iterator<Object> iterator = regionNavs.iterator();
-        Iterator<Object> category = categoryNavs.iterator();
-        int i = 0;
-        List<JSONObject> regionItems = new ArrayList<>();
-        List<JSONObject> categoryItems = new ArrayList<>();
-//        while (iterator.hasNext()) {
-//            JSONObject regionBeanJSON = (JSONObject) iterator.next();
-//            int parentId = regionBeanJSON.getIntValue("parentId");
-//            int id = regionBeanJSON.getIntValue("id");
-//            String name = regionBeanJSON.getString("name");
-//            if (id == 0 || id == -10000 || parentId == -10000 || parentId == 0 || id == parentId) continue;
-//            i++;
-//            System.out.println(i + "-->>" + name);
-//            regionItems.add(regionBeanJSON);
+//        String userDir = System.getProperty("user.dir");
+//        String dpJonsFilePath = userDir + "/mate/dp-xm.json";
+//               dpJonsFilePath = userDir + "/mate/dp-sh.json";
+////        dpJonsFilePath = "/Users/Elijah/Desktop/self/rest-date-route/src/main/resources/dp-sh.json";
+//        List<String> list = FileUtil.readFile(dpJonsFilePath);
+//        String dpJsonText = StringUtils.join(list.toArray(new String[list.size()]), "");
+//        JSONObject jsonObject = JSON.parseObject(dpJsonText);
+//        String cityId = WaimaiBootstrap.dp_cityIds[0];
+//        cityId = WaimaiBootstrap.dp_cityIds[1];  //
+//        regionNavs = jsonObject.getJSONArray("regionNavs");
+//        categoryNavs = jsonObject.getJSONArray("categoryNavs");
+//        Iterator<Object> iterator = regionNavs.iterator();
+//        Iterator<Object> category = categoryNavs.iterator();
+//        int i = 0;
+//        List<JSONObject> regionItems = new ArrayList<>();
+//        List<JSONObject> categoryItems = new ArrayList<>();
+////        while (iterator.hasNext()) {
+////            JSONObject regionBeanJSON = (JSONObject) iterator.next();
+////            int parentId = regionBeanJSON.getIntValue("parentId");
+////            int id = regionBeanJSON.getIntValue("id");
+////            String name = regionBeanJSON.getString("name");
+////            if (id == 0 || id == -10000 || parentId == -10000 || parentId == 0 || id == parentId) continue;
+////            i++;
+////            System.out.println(i + "-->>" + name);
+////            regionItems.add(regionBeanJSON);
+////        }
+////        countByRegion(cityId, regionItems);
+//        while (category.hasNext()) {
+//            JSONObject categoryBeanJSON = (JSONObject) category.next();
+//            int id = categoryBeanJSON.getIntValue("id");
+//            int parentId = categoryBeanJSON.getIntValue("parentId");
+//            String name = categoryBeanJSON.getString("name");
+//            if (id == 10 || id == 0 || parentId == 0 || id == parentId) continue;
+//            if (parentId != 10) continue;
+//            System.out.println(++i + " ,id:" + id + ",name:" + name);
+//            categoryItems.add(categoryBeanJSON);
 //        }
-//        countByRegion(cityId, regionItems);
-        while (category.hasNext()) {
-            JSONObject categoryBeanJSON = (JSONObject) category.next();
-            int id = categoryBeanJSON.getIntValue("id");
-            int parentId = categoryBeanJSON.getIntValue("parentId");
-            String name = categoryBeanJSON.getString("name");
-            if (id == 10 || id == 0 || parentId == 0 || id == parentId) continue;
-            if (parentId != 10) continue;
-            System.out.println(++i + " ,id:" + id + ",name:" + name);
-            categoryItems.add(categoryBeanJSON);
+//        countByXX(cityId, categoryItems, false);
+        String cityId = args[0];
+        String categoryId = args[1];
+        String regionId = args[2];
+
+        int start = 0;
+        while (true) {
+            TimeUtil.sleep(500L);
+            String time = System.currentTimeMillis() + "";
+            int[] search = search(start, cityId, regionId, categoryId, time);
+            int isEnd = search[0];
+            int nextStartIndex = search[1];
+            if (isEnd == 1) {
+                break;
+            }
+            start = nextStartIndex;
         }
-        countByXX(cityId, categoryItems, false);
+    }
+
+    int[] search(int start,
+                 String cityId,
+                 String regionId,
+                 String categoryId,
+                 String time) {
+        String s = "https://mapi.dianping.com/searchshop.json?start={0}&regionid={1}&categoryid={2}&sortid=0&locatecityid={3}&maptype=0&cityid={4}&_={5}&callback=Zepto{6}";
+        reqHeader.put(Cons.USER_AGENT, Cons.MOBILE_USER_AGENT);
+        reqHeader.put(Cons.COOKIE, "_hc.v=5e2ef585-e032-7e64-0ac7-ce146e828a4a.1500731291; _lxsdk_cuid=15d74d982cdc8-085875325275ed-3067780b-13c680-15d74d982cdc8; _lxsdk=15d74d982cdc8-085875325275ed-3067780b-13c680-15d74d982cdc8; PHOENIX_ID=0a010918-15d74d7054f-6e92eba; aburl=1; cy=" + cityId + "; cye=shanghai; __mta=223812900.1500904004251.1500904004251.1500904004251.1; cityid=" + cityId + "; msource=default; default_ab=shopList%3AA%3A1; _lxsdk_s=15d751a2f1e-111-750-fda%7C%7C5");
+        String formatUrl = MessageFormat.format(s, start + "", regionId, categoryId, cityId, cityId, time, time);
+        RespBean contentByUrl = urlService.getContentByUrl(formatUrl, reqHeader);
+        String content = contentByUrl.getContent();
+        boolean isEnd = false;
+        int nextStartIndex = start;
+        if (StringUtils.isNotEmpty(content)) {
+            int i1 = content.indexOf("{");
+            int i2 = content.lastIndexOf("}");
+            content = content.substring(i1, i2 + 1);
+            JSONObject searchJson = JSON.parseObject(content);
+            JSONArray list = searchJson.getJSONArray("list");
+            if (list.size() > 0) {
+//                logger.error(">0");
+            } else {
+                logger.error("<0,{}", content);
+            }
+            int recordCount = searchJson.getIntValue("recordCount");
+            nextStartIndex = searchJson.getIntValue("nextStartIndex");
+            isEnd = searchJson.getBooleanValue("isEnd");
+            Iterator<Object> iterator = list.iterator();
+            int ix = start;
+            while (iterator.hasNext()) {
+                JSONObject next = (JSONObject) iterator.next();
+                removeKeys(next);
+                next.put("startIndex", ix++);
+                next.put("recordCount", recordCount);
+                next.put("nextStartIndex", nextStartIndex);
+                next.put("isEnd", isEnd);
+                logger.info(next.toString());
+            }
+        } else {
+            logger.error("is empty by url:{}", formatUrl);
+            logger.error("is empty ,pls check it , by ctx:{}", content);
+        }
+        return new int[]{isEnd ? 1 : 0, nextStartIndex};
+    }
+
+    private void removeKeys(JSONObject next) {
+        next.remove("adInfo");
+        next.remove("defaultPic");
+        next.remove("dishtags");
+        next.remove("extraJson");
+        next.remove("matchText");
+        next.remove("originalUrlKey");
+        next.remove("authorityIconUrl");
+        next.remove("authorityLabelType");
+        next.remove("headerImageBorderColor");
+        next.remove("scoreText");
+        next.remove("recommendReasonData");
+        next.remove("recommendReason");
+        next.remove("shopDealInfos");
+        next.remove("shopPositionInfo");
+        next.remove("shopStateInformation");
+        next.remove("tagList");
+        next.remove("adShop");
+        next.remove("altName");
     }
 
     private void countByXX(String cityId, List<JSONObject> regionItems, boolean isRegion) {

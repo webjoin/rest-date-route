@@ -103,7 +103,7 @@ public class AnjunkeBootstap {
         Map<String, String> reqHeader = new HashMap<>();
         reqHeader.put(header[0], header[1]);
         for (String[] url : urls) {
-            if (i++ == 0) continue;
+//            if (i++ == 0) continue;
             logger.info("正在执行{}地址", url[0]);
             int page = 1;
             int htotalPage = 0;

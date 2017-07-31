@@ -147,7 +147,7 @@ public class HttpUtil {
     }
 
     private static void setCookies(String url, CloseableHttpResponse httpResponse) {
-        if (DpCons.BASE_URL.equals(url)) {
+        if (Cons.DP_BASE_URL.equals(url)) {
             Header[] allHeaders = httpResponse.getAllHeaders();
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < allHeaders.length; i++) {

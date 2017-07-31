@@ -18,19 +18,38 @@
             <DefaultRolloverStrategy max="200"/>
         </RollingRandomAccessFile>
 
-        <RollingRandomAccessFile name="OTHER_LOG_FILE" immediateFlush="false" fileName="logs/other/other-${sys:area}.log"
+        <!--<RollingRandomAccessFile name="OTHER_LOG_FILE" immediateFlush="false"-->
+        <RollingRandomAccessFile name="OTHER_LOG_FILE"
+                                 fileName="logs/other/other-${sys:area}.log"
                                  filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
-            <!--<ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="120 MB"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="140"/>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="OTHER_LOG_FILE_ERR"   immediateFlush="false"
+                                 fileName="logs/other/other-${sys:area}-err.log"
+                                 filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-err-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="%m%n"/>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
         </RollingRandomAccessFile>
 
 
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE1" immediateFlush="false" fileName="logs/ele/wm-ele-${sys:area}.log"
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE1" immediateFlush="false"
+                                 fileName="logs/ele/wm-ele-${sys:area}.log"
                                  filePattern="logs/ele/$${date:yyyyMM}/wm-ele-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
             <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
@@ -40,7 +59,8 @@
             </Policies>
             <DefaultRolloverStrategy max="200"/>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE1-error" immediateFlush="false" fileName="logs/ele/wm-ele-err.log"
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE1-error" immediateFlush="false"
+                                 fileName="logs/ele/wm-ele-err.log"
                                  filePattern="logs/ele/$${date:yyyyMM}/wm-ele-err-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -57,6 +77,7 @@
         <Root level="INFO">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="OTHER_LOG_FILE"/>
+            <AppenderRef ref="OTHER_LOG_FILE_ERR"/>
         </Root>
         <Logger name="com.viewt.rest.WaimaiBootstrap" level="INFO" additivity="false">
             <AppenderRef ref="STDOUT"/>

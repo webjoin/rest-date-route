@@ -6,11 +6,11 @@
 	</formats>
 	<includeBaseDirectory>true</includeBaseDirectory>
 	<fileSets>
-		<!--<fileSet>-->
-			<!--<directory>${project.basedir}/logs</directory>-->
-			<!--<outputDirectory>logs</outputDirectory>-->
-			<!--&lt;!&ndash;<fileMode>0755</fileMode>&ndash;&gt;-->
-		<!--</fileSet>-->
+		<fileSet>
+			<directory>${project.basedir}/mate</directory>
+			<outputDirectory>mate</outputDirectory>
+			<fileMode>0755</fileMode>
+		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/bin</directory>
 			<outputDirectory>bin</outputDirectory>
