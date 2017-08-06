@@ -17,14 +17,14 @@ import java.util.*;
 /**
  * Created by Elijah on 13/7/2017.
  */
-public class ElemeBootstrapData extends DbBootstrap {
-    static Logger logger = LoggerFactory.getLogger(ElemeBootstrapData.class);
+public class ElemeBootstrapDataTest extends DbBootstrap {
+    static Logger logger = LoggerFactory.getLogger(ElemeBootstrapDataTest.class);
 
     public static void main(String[] args) {
 
-        ElemeBootstrapData bootstrapData;
+        ElemeBootstrapDataTest bootstrapData;
 
-        bootstrapData = new ElemeBootstrapData();
+        bootstrapData = new ElemeBootstrapDataTest();
         bootstrapData.parseFile();
     }
 

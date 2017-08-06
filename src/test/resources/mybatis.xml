@@ -33,5 +33,6 @@
         <mapper resource="mybatis/restdata/WmMeituanSkuMapper.xml"/>
 
         <mapper resource="mybatis/restdata/DpCategoryBeanMapper.xml"/>
+        <mapper resource="mybatis/restdata/DpShopListBeanMapper.xml"/>
     </mappers>
 </configuration>

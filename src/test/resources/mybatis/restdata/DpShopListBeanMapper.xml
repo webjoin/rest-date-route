@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.DpShopListBeanMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.DpShopListBean">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="hotelBookable" jdbcType="TINYINT" property="hotelbookable" />
+    <result column="bookable" jdbcType="TINYINT" property="bookable" />
+    <result column="hasTakeaway" jdbcType="TINYINT" property="hastakeaway" />
+    <result column="hasPromo" jdbcType="TINYINT" property="haspromo" />
+    <result column="regionName" jdbcType="VARCHAR" property="regionname" />
+    <result column="hasMoPay" jdbcType="TINYINT" property="hasmopay" />
+    <result column="cityId" jdbcType="INTEGER" property="cityid" />
+    <result column="matchText" jdbcType="VARCHAR" property="matchtext" />
+    <result column="categoryName" jdbcType="VARCHAR" property="categoryname" />
+    <result column="newShop" jdbcType="TINYINT" property="newshop" />
+    <result column="memberCardId" jdbcType="INTEGER" property="membercardid" />
+    <result column="altName" jdbcType="VARCHAR" property="altname" />
+    <result column="priceText" jdbcType="VARCHAR" property="pricetext" />
+    <result column="authorityLabelType" jdbcType="INTEGER" property="authoritylabeltype" />
+    <result column="branchName" jdbcType="VARCHAR" property="branchname" />
+    <result column="orderDish" jdbcType="TINYINT" property="orderdish" />
+    <result column="shopPower" jdbcType="INTEGER" property="shoppower" />
+    <result column="hasDeals" jdbcType="TINYINT" property="hasdeals" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="scoreText" jdbcType="VARCHAR" property="scoretext" />
+    <result column="shopType" jdbcType="INTEGER" property="shoptype" />
+    <result column="queueable" jdbcType="TINYINT" property="queueable" />
+    <result column="categoryId" jdbcType="INTEGER" property="categoryid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, hotelBookable, bookable, hasTakeaway, hasPromo, regionName, hasMoPay, cityId, 
+    matchText, categoryName, newShop, memberCardId, altName, priceText, authorityLabelType, 
+    branchName, orderDish, shopPower, hasDeals, name, scoreText, shopType, queueable, 
+    categoryId, status, create_time
+  </sql>
+
+
+  <insert id="inserts">
+
+    insert INTO dp_shop_list(<include refid="Base_Column_List"/>)
+    VALUES
+    <foreach collection="list" item="shop" index="index" separator=",">
+      (
+      #{shop.id},
+      #{shop.hotelbookable},
+      #{shop.bookable},
+      #{shop.hastakeaway},
+      #{shop.haspromo},
+      #{shop.regionname},
+      #{shop.hasmopay},
+      #{shop.cityid},
+      #{shop.matchtext},
+      #{shop.categoryname},
+      #{shop.newshop},
+      #{shop.membercardid},
+      #{shop.altname},
+      #{shop.pricetext},
+      #{shop.authoritylabeltype},
+      #{shop.branchname},
+      #{shop.orderdish},
+      #{shop.shoppower},
+      #{shop.hasdeals},
+      #{shop.name},
+      #{shop.scoretext},
+      #{shop.shoptype},
+      #{shop.queueable},
+      #{shop.categoryid},
+      #{shop.status},
+      #{shop.createTime}
+      )
+    </foreach>
+
+
+  </insert>
+
+</mapper>

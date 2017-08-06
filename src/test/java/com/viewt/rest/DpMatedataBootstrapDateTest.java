@@ -19,9 +19,9 @@ import java.util.*;
 /**
  * Created by Elijah on 25/7/2017.
  */
-public class DpMatedataBootstrapDate extends DbBootstrap {
+public class DpMatedataBootstrapDateTest extends DbBootstrap {
     public static void main(String[] args) {
-        DpMatedataBootstrapDate bootstrapDate = new DpMatedataBootstrapDate();
+        DpMatedataBootstrapDateTest bootstrapDate = new DpMatedataBootstrapDateTest();
         bootstrapDate.deal();
 
 

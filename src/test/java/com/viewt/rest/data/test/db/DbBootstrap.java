@@ -5,6 +5,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +34,16 @@ public abstract class DbBootstrap {
             System.exit(1);
         }
     }
+    protected SqlSession getSqlSession(){
+        SqlSession sqlSession;
+        try{
+            sqlSession = sqlSessionFactory.openSession();
+        }catch (Exception e){
+            return null;
+        }
+        return sqlSession;
 
+    }
     protected int insert(String statement, Object parameter) {
         SqlSession sqlSession = null;
         try {
