@@ -19,7 +19,7 @@
         </RollingRandomAccessFile>
 
         <!--<RollingRandomAccessFile name="OTHER_LOG_FILE" immediateFlush="false"-->
-        <RollingRandomAccessFile name="OTHER_LOG_FILE"
+        <RollingRandomAccessFile name="OTHER_LOG_FILE"  immediateFlush="false"
                                  fileName="logs/other/other-${sys:area}.log"
                                  filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>

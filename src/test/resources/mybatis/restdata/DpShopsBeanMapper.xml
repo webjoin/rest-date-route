@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.DpShopsBeanMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.DpShopsBean">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sourceFileName" jdbcType="VARCHAR" property="sourcefilename" />
+    <result column="summarys" jdbcType="VARCHAR" property="summarys" />
+    <result column="avgPrice" jdbcType="DOUBLE" property="avgprice" />
+    <result column="shopCityId" jdbcType="INTEGER" property="shopcityid" />
+    <result column="lastReviewTime" jdbcType="BIGINT" property="lastreviewtime" />
+    <result column="cityId" jdbcType="INTEGER" property="cityid" />
+    <result column="shopGlat" jdbcType="VARCHAR" property="shopglat" />
+    <result column="smell" jdbcType="DOUBLE" property="smell" />
+    <result column="mainRegionId" jdbcType="INTEGER" property="mainregionid" />
+    <result column="reviewCountStar2" jdbcType="INTEGER" property="reviewcountstar2" />
+    <result column="reviewCountStar1" jdbcType="INTEGER" property="reviewcountstar1" />
+    <result column="shopGlng" jdbcType="VARCHAR" property="shopglng" />
+    <result column="reviewCountStar4" jdbcType="INTEGER" property="reviewcountstar4" />
+    <result column="reviewCountStar3" jdbcType="INTEGER" property="reviewcountstar3" />
+    <result column="cityName" jdbcType="VARCHAR" property="cityname" />
+    <result column="reviewCount" jdbcType="INTEGER" property="reviewcount" />
+    <result column="reviewCountStar5" jdbcType="INTEGER" property="reviewcountstar5" />
+    <result column="cityGlng" jdbcType="VARCHAR" property="cityglng" />
+    <result column="tuan" jdbcType="VARCHAR" property="tuan" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="cityEnName" jdbcType="VARCHAR" property="cityenname" />
+    <result column="power" jdbcType="INTEGER" property="power" />
+    <result column="allDishes" jdbcType="VARCHAR" property="alldishes" />
+    <result column="cityGlat" jdbcType="VARCHAR" property="cityglat" />
+    <result column="mainCategoryId" jdbcType="INTEGER" property="maincategoryid" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="fullName" jdbcType="VARCHAR" property="fullname" />
+    <result column="shopPower" jdbcType="INTEGER" property="shoppower" />
+    <result column="env" jdbcType="DOUBLE" property="env" />
+    <result column="mainCategoryName" jdbcType="VARCHAR" property="maincategoryname" />
+    <result column="categoryURLName" jdbcType="VARCHAR" property="categoryurlname" />
+    <result column="service" jdbcType="DOUBLE" property="service" />
+    <result column="branchQty" jdbcType="INTEGER" property="branchqty" />
+    <result column="shopType" jdbcType="INTEGER" property="shoptype" />
+    <result column="hui" jdbcType="VARCHAR" property="hui" />
+    <result column="shop_geog" jdbcType="VARCHAR" property="shopgeog" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id,
+    sourceFileName, summarys, avgPrice, shopCityId, lastReviewTime, cityId, shopGlat,
+    smell, mainRegionId, reviewCountStar2, reviewCountStar1, shopGlng, reviewCountStar4,
+    reviewCountStar3, cityName, reviewCount, reviewCountStar5, cityGlng, tuan, tel, cityEnName,
+    power, allDishes, cityGlat, mainCategoryId, address, fullName, shopPower, env, mainCategoryName,
+    categoryURLName, service, branchQty, shopType, hui,
+    shop_geog
+  </sql>
+  <!--﻿ST_GeographyFromText('SRID=4326;POINT(118.110332 24.503569)')-->
+  <insert id="inserts">
+
+    insert INTO dp_shops(<include refid="Base_Column_List" />)
+    VALUES
+    <foreach collection="list" index="index" item="shop" separator=",">
+      (
+        #{shop.id},
+        #{shop.sourcefilename},
+        #{shop.summarys},
+        #{shop.avgprice},
+        #{shop.shopcityid},
+        #{shop.lastreviewtime},
+        #{shop.cityid},
+        #{shop.shopglat},
+        #{shop.smell},
+        #{shop.mainregionid},
+        #{shop.reviewcountstar2},
+        #{shop.reviewcountstar1},
+        #{shop.shopglng},
+        #{shop.reviewcountstar4},
+        #{shop.reviewcountstar3},
+        #{shop.cityname},
+        #{shop.reviewcount},
+        #{shop.reviewcountstar5},
+        #{shop.cityglng},
+        #{shop.tuan},
+        #{shop.tel},
+        #{shop.cityenname},
+        #{shop.power},
+        #{shop.alldishes},
+        #{shop.cityglat},
+        #{shop.maincategoryid},
+        #{shop.address},
+        #{shop.fullname},
+        #{shop.shoppower},
+        #{shop.env},
+        #{shop.maincategoryname},
+        #{shop.categoryurlname},
+        #{shop.service},
+        #{shop.branchqty},
+        #{shop.shoptype},
+        #{shop.hui}
+        <!--<if test="shop.shopgeog != null">-->
+          ,ST_GeographyFromText(#{shop.shopgeog})
+        <!--</if>-->
+      )
+    </foreach>
+
+
+  </insert>
+
+
+</mapper>

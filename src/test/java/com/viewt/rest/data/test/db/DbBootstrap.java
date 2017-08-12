@@ -18,7 +18,6 @@ import java.util.List;
 public abstract class DbBootstrap {
 
     String resource = "mybatis.xml";
-    String excelFile  = "dp_booking_data.xlsx";
     SqlSessionFactory sqlSessionFactory = null;
     protected void initSqlSessionFactory(String env) {
         InputStream inputStream;

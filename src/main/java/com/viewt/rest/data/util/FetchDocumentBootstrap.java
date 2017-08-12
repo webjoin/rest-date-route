@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 提取json数据
+ */
 public class FetchDocumentBootstrap {
 
     public static void main(String[] args) {

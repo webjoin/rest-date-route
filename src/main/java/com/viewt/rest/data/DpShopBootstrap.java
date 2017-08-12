@@ -11,6 +11,7 @@ import com.viewt.rest.data.service.UrlService;
 import com.viewt.rest.data.service.impl.UrlServiceImpl;
 import com.viewt.rest.data.util.*;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,42 +37,60 @@ public class DpShopBootstrap extends BaseBootstrap {
     public static void main(String[] args) {
         DpShopBootstrap bootstrap = new DpShopBootstrap();
         bootstrap.start(args);
+//        List<String> ls = new ArrayList<>();
+//        ls.add("aaa");
+//        ls.add("bb");
+//        ls.add("cc");
+//        List<String> list = ls.subList(1, 3);
+//        String[] strings = list.toArray(new String[list.size()]);
+//        list.clear();
+//        list = null;
+//        ls.clear();
+//        for (String string : strings) {
+//            System.out.println(string);
+//        }
+//        System.out.println(ls.size());
     }
 
     @Override
     public void crawl(String[] args) {
-//        int start = 1;
-//        int end = 0;
-//        String log = "";
-//        if (args.length >= 1) {
-//            start = Integer.parseInt(args[0]);
-//        }
-//        if (args.length >= 2) {
-//            end = Integer.parseInt(args[1]);
-//        }
-//        if (args.length >= 3) {
-//            log = args[2];
-//        }
-//        String filePath = Cons.USER_DIR + "/logs/other/other-" + log + ".log";
-//        List<String> list = FileUtil.readFile(filePath);
-//        if (end == 0 || end > list.size()) {
-//            end = list.size();
-//        }
-//        if (start > list.size()) {
-//            logger.error("start:{} is great than size:{}", start, list.size());
-//            return;
-//        }
-//
-//        int i = 0;
-//        for (String item : list) {
-//            i++;
-//            logger.error("doing... {}", i); //21:34 started
-//            if (i < start || i > end) continue;
-//            if (StringUtils.isEmpty(item)) continue;
-//            getItemData(item);
-//            logger.error("end doing... {}", i); //21:34 started
-//        }
-        getItemData("3471487");
+        int start = 1;
+        int end = 0;
+        String log = "";
+        if (args.length >= 1) {
+            start = Integer.parseInt(args[0]);
+        }
+        if (args.length >= 2) {
+            end = Integer.parseInt(args[1]);
+        }
+        if (args.length >= 3) {
+            log = args[2];
+        }
+        String filePath = Cons.USER_DIR + "/logs/other/other-" + log + ".log";
+        List<String> list = FileUtil.readFile(filePath);
+        if (end == 0 || end > list.size()) {
+            end = list.size();
+        }
+        if (start > list.size()) {
+            logger.error("start:{} is great than size:{}", start, list.size());
+            return;
+        }
+        List<String> sublist = list.subList(start, end);
+        String[] strings = sublist.toArray(new String[sublist.size()]);
+        sublist.clear();
+        list.clear();
+        list = null;
+        sublist = null;
+        int i = 0;
+        logger.error("开始{}，结束{}", start, end);
+        for (String item : strings) {
+            i++;
+            logger.error("doing... {}", start + i); //21:34 started
+            if (StringUtils.isEmpty(item)) continue;
+            getItemData(item);
+            logger.error("end doing... {}", i); //21:34 started
+        }
+//        getItemData("3471487");
     }
 
     //主站拿基本信息
@@ -85,10 +104,11 @@ public class DpShopBootstrap extends BaseBootstrap {
 //    String reviewAndStar = "http://www.dianping.com/ajax/json/shopDynamic/reviewAndStar?shopId={id}&cityId={cityId}&mainCategoryId={categoryId}";
     //推荐菜
 //    String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId=69996989&cityId=1&shopName=%E5%B1%B1%E4%BA%BA%E7%91%B6&power=5&mainCategoryId=252&shopType=10&shopCityId=1";
-    String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power=5&mainCategoryId={categoryId}&shopType=10&shopCityId={cityId}";
+    String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power=5&mainCategoryId={categoryId}&shopType=10&shopCityId={cityId}&_token=eJxVjFtPgzAAhf9Ln5tRSjs63ia6BXRGLuOi4QEYDtRyazPIjP%2FdLvLi03fy5ZzzDUbnBCwdIUR0CKRQmSKMN5hSTDCBoPzvqKFqxRjdA%2BtNJ4hCg9HsZnwllCEIbhDK4F9kpplB9YLJreOoCqil7C1Nm6ZpdWrytm%2Fa86rsuCbqrtfWzNBNQhmAAKgFD9VC8XNhvlAuFM25BRao3DkMBBHDu38Q4RFFpXy%2BHuZr2MxuWLLLthPp%2FrGLqFu1O8nzoY5aeleSaY7t6sGOeRrPXcHdwYtTk1Ypx6M57l8aZCRF0qxf2VNw2QVTfvzinv3hO7a3HWmQTODnF63GXYE%3D";
+//    String shopTabs1= "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={}&cityId={}        &shopName={}        &power=5&mainCategoryId=210         &shopType=10&shopCityId=1058    &_token=eJxVi9tOg0AURf%2FlPE%2FKMMzAlMQHbWkdpDVyi9b0gV4oiFBgiBSM%2F%2B409sXk5Kydlb2%2FoRUHsHWMMdURdFJlhgkx1bOMKUaw%2F%2B%2BYodyujedgv%2BsUM2Rwtr0aXwllKEZTjLfoL3LL2iJC1V07QlUg67ra1rS%2B7yeHPKnqvDpN9udSk9m51jjWqWUSDghALcpQLRSLG5MbuxtlfqrAhqN7CQNJZZP6KxlGeOXFLwM2VuPj%2BtlzPtfjwGe5X2yWzSlm7rFadGXSZHHFHvZUDMWCvy3krF%2FPHTUR%2FUfqjY6hp5uasKEyrWT66rWE7QSRy0xsIqeJBA%2Fu3eDJ%2FaJ38PMLm4lcqQ%3D%3D";
     //大家认为  包含了 评论数量
 //    String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId=69996989&cityId=1&categoryURLName=food&power=5&cityEnName=shanghai&shopType=10";
-    String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId={id}&cityId={cityId}&categoryURLName=food&power={power}&cityEnName={cityEnName}&shopType={shopType}";
+    String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId={id}&cityId={cityId}&categoryURLName=food&power={power}&cityEnName={cityEnName}&shopType={shopType}&_token=eJxVjFtPgzAAhf9Ln5tRSjs63ia6BXRGLuOi4QEYDtRyazPIjP%2FdLvLi03fy5ZzzDUbnBCwdIUR0CKRQmSKMN5hSTDCBoPzvqKFqxRjdA%2BtNJ4hCg9HsZnwllCEIbhDK4F9kpplB9YLJreOoCqil7C1Nm6ZpdWrytm%2Fa86rsuCbqrtfWzNBNQhmAAKgFD9VC8XNhvlAuFM25BRao3DkMBBHDu38Q4RFFpXy%2BHuZr2MxuWLLLthPp%2FrGLqFu1O8nzoY5aeleSaY7t6sGOeRrPXcHdwYtTk1Ypx6M57l8aZCRF0qxf2VNw2QVTfvzinv3hO7a3HWmQTODnF63GXYE%3D";
 
     private Map<String, String> reqHeader = new HashMap<>();
 
@@ -96,7 +116,7 @@ public class DpShopBootstrap extends BaseBootstrap {
 
         DpDataBean dpDataBean = new DpDataBean();
         dpDataBean.setId(Long.parseLong(dpId));
-        String cookie = "navCtgScroll=0; s_ViewType=10; JSESSIONID=BBC811198139466461ED7C2E6C1FA2A0; aburl=1; cy=15; cye=xiamen; _lxsdk_cuid=15d6a8e3575c8-06379986b921a6-3067780b-13c680-15d6a8e3575c8; _lxsdk=15d6a8e3575c8-06379986b921a6-3067780b-13c680-15d6a8e3575c8; _hc.v=5e2ef585-e032-7e64-0ac7-ce146e828a4a.1500731291; _lxsdk_s=15d6a8e3578-13b-afe-563%7C%7C3";
+        String cookie = "_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; cityid=1; default_ab=shop%3AA%3A1; _lxsdk_cuid=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; _lxsdk=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; s_ViewType=10; JSESSIONID=73ACF16622538BC6BC4E2BAEDE35CE9A; __mta=253147702.1502292209388.1502292209388.1502292229508.2; aburl=1; cy=15; cye=xiamen; _lxsdk_s=15dc797ec93-0c3-bc-f12%7C%7C38";
         reqHeader.put("Cookie", cookie);
 
         reqHeader.put("User-Agent", Cons.PC_USER_AGENT);
@@ -104,19 +124,25 @@ public class DpShopBootstrap extends BaseBootstrap {
         parseShopRespBean(shopRespBean, dpDataBean);
         dpDataBean.setId(Long.parseLong(dpId));
 
-        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
-        String mShopUrl = dpMShopUrl.replace("{id}", dpId);
-        RespBean dpMShopRespBean = urlService.getContentByUrl(mShopUrl, reqHeader);
-        parseMShopRespBean(dpMShopRespBean, dpDataBean);
-        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
-//        String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power={power}&mainCategoryId={categoryId}&shopType=10&shopCityId={shopCityId}";
-//        if ("24916558".equals(dpId)){
+//        if ("44282963".equals(dpId)){
 //            System.out.println("abc");
 //        }
         if (StringUtils.isEmpty(dpDataBean.getFullName())) {
             logger.error(dpId + " this id has some problem ... 貌似这个id有问题哈。。。。");
             return;
         }
+        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
+        String mShopUrl = dpMShopUrl.replace("{id}", dpId);
+        RespBean dpMShopRespBean = urlService.getContentByUrl(mShopUrl, reqHeader);
+        parseMShopRespBean(dpMShopRespBean, dpDataBean);
+        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
+//        String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power={power}&mainCategoryId={categoryId}&shopType=10&shopCityId={shopCityId}";
+
+
+
+
+        reqHeader.put("Cookie","_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; cityid=1; default_ab=shop%3AA%3A1; _lxsdk_cuid=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; _lxsdk=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; s_ViewType=10; JSESSIONID=73ACF16622538BC6BC4E2BAEDE35CE9A; __mta=253147702.1502292209388.1502292209388.1502292229508.2; aburl=1; cy=15; cye=xiamen; _lxsdk_s=15dc797ec93-0c3-bc-f12%7C%7C38");
+
         String shopTabsUrl =
                 shopTabs.replace("{id}", dpId)
                         .replace("{cityId}", dpDataBean.getCityId() + "")
@@ -124,6 +150,7 @@ public class DpShopBootstrap extends BaseBootstrap {
                         .replace("{power}", dpDataBean.getPower() + "")
                         .replace("{categoryId}", dpDataBean.getMainCategoryId() + "")
                         .replace("{shopCityId}", dpDataBean.getShopCityId() + "");
+
         RespBean shopTabsRespBean = urlService.getContentByUrl(shopTabsUrl, reqHeader);
         parseShopTabsRespBean(shopTabsRespBean, dpDataBean);
 
@@ -364,7 +391,7 @@ public class DpShopBootstrap extends BaseBootstrap {
                 bean.setLastReviewTime(times.get(times.size() - 1));
             }
 
-            if (summarys  != null) {
+            if (summarys != null) {
                 for (Object summary : summarys) {
                     JSONObject object = (JSONObject) summary;
                     String val = object.getString("summaryString") + "," +

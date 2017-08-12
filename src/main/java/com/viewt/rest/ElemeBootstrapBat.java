@@ -84,6 +84,12 @@ public class ElemeBootstrapBat {
         String jdk = "C:\\jdk1.7.0_06\\bin\\java";
 //                jdk = "C:\\jdk1.8.0_121\\bin\\java";
 //                jdk = "C:\\jdk1.8.0_141\\bin\\java";
+        String jdk1 = System.getProperty("jdk");
+        if (null == jdk1 || jdk1.isEmpty()) {
+            throw new IllegalArgumentException("jdk must set , so pls .");
+//            System.exit(1);
+        }
+        jdk = jdk1;
         String fileName = "/" + prefix + "-startup-" + i + ".bat";
         Path path = Paths.get(path1 + "/bin" + fileName);
         BufferedWriter br1 = Files.newBufferedWriter(path, Charset.defaultCharset());

@@ -390,8 +390,8 @@ public class HttpUtil {
     private static SSLConnectionSocketFactory sslConnectionSocketFactory;
 
 
-    public static String postJSON(String url) {
-        return post(url, "", "application/json");
+    public static String postJson(String url,String postjson) {
+        return post(url, postjson, "application/json");
     }
     public static String postForm(String url,String postData) {
         return post(url, postData, "application/x-www-form-urlencoded");

@@ -1,15 +1,12 @@
 package com.viewt.rest;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.viewt.rest.data.DpBootstrapIdsFile;
 import com.viewt.rest.data.test.db.DbBootstrap;
-import com.viewt.rest.data.test.db.MybatisHelper;
 import com.viewt.rest.entity.restdata.DpShopListBean;
 import com.viewt.rest.mapper.restdata.DpShopListBeanMapper;
 import org.apache.ibatis.session.SqlSession;
 import tk.mybatis.mapper.common.Mapper;
-import tk.mybatis.mapper.entity.Config;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Elijah on 1/8/2017.
+ * 写入dp-list数据入库
  */
 public class DpListBootstrapDataTest extends DbBootstrap {
 
@@ -25,8 +23,8 @@ public class DpListBootstrapDataTest extends DbBootstrap {
         DpListBootstrapDataTest data = new DpListBootstrapDataTest();
         String env = "local";
         data.initSqlSessionFactory(env);
-        data.save2db();
-//        data.save2db1();
+//        data.save2db();
+        data.save2db1();
     }
 
     private void save2db1() {

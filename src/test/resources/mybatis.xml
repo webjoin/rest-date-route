@@ -18,6 +18,19 @@
                 <property name="poolPingEnabled" value="true"/>
             </dataSource>
         </environment>
+        <environment id="local-postgre">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:postgresql://127.0.0.1:5432/rest-data"/>
+                <property name="username" value="postgres"/>
+                <property name="password" value="123456"/>
+                <property name="poolMaximumActiveConnections" value="10"/>
+                <property name="poolPingQuery" value="select 1 "/>
+                <property name="poolTimeToWait" value="5000"/>
+                <property name="poolPingEnabled" value="true"/>
+            </dataSource>
+        </environment>
     </environments>
     <mappers>
         <mapper resource="mybatis/restdata/RestBusiCircleBeanMapper.xml"/>
@@ -34,5 +47,6 @@
 
         <mapper resource="mybatis/restdata/DpCategoryBeanMapper.xml"/>
         <mapper resource="mybatis/restdata/DpShopListBeanMapper.xml"/>
+        <mapper resource="mybatis/restdata/DpShopsBeanMapper.xml"/>
     </mappers>
 </configuration>

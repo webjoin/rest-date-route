@@ -16,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Elijah on 18/7/2017.
@@ -51,8 +49,12 @@ public class DpBootstrapIdsFile {
     public void fetchDpIds(Boolean isDpWaimai) {
         String path = "/Users/Elijah/Desktop/self/sites/dp/dp-shop-list";
         path = "/Users/Elijah/Downloads/baidu-company-crawler-data/dp-xiamen-shop-list-2017-0719";
-//        path = "/Users/Elijah/Downloads/baidu-company-crawler-data/other-dp-shops";
+        path = "/Users/Elijah/Downloads/baidu-company-crawler-data/other-dp-shops/dp";
+        path = "/Users/Elijah/Downloads/baidu-company-crawler-data/dp-shop-list/dp";
 //        path = Cons.USER_DIR + "/logs/other/other-" + System.getProperty("list") + ".log";
+        if (Boolean.FALSE == isDpWaimai) {
+            System.out.println("a....");
+        }
         File file = new File(path);
         File[] files = new File[1];
         if (file.isDirectory()) {
@@ -60,7 +62,7 @@ public class DpBootstrapIdsFile {
         } else if (file.isFile()) {
             files[0] = file;
         }
-        List<String> dpIds = new ArrayList<>();
+        Set<String> dpIds = new HashSet<>();
         for (File file1 : files) {
             if (!file1.isFile() || !file1.getName().startsWith("other")) continue;
             System.out.println(file1.getAbsoluteFile());
@@ -76,13 +78,18 @@ public class DpBootstrapIdsFile {
                     logger.error(s);
                     continue;
                 }
-                JSONArray list1 = JSONUtil.getJSONArray(shopItem, "list");
-                Iterator<Object> iterator = list1.iterator();
-                while (iterator.hasNext()) {
-                    JSONObject next = (JSONObject) iterator.next();
-                    logItem(isDpWaimai, dpIds, next);
-                }
-//                logItem(isDpWaimai, dpIds, shopItem);
+//                JSONArray list1 = JSONUtil.getJSONArray(shopItem, "list");
+//                Iterator<Object> iterator = list1.iterator();
+//                while (iterator.hasNext()) {
+//                    JSONObject next = (JSONObject) iterator.next();
+//                    logItem(isDpWaimai, dpIds, next);
+//                }
+                logItem(isDpWaimai, dpIds, shopItem);
+            }
+        }
+        if (Boolean.FALSE == isDpWaimai) {
+            for (String dpId : dpIds) {
+                logger.info("{}", dpId);
             }
         }
     }
@@ -90,11 +97,12 @@ public class DpBootstrapIdsFile {
     public List<JSONObject> items = new ArrayList<>();
 
 
-    private void logItem(Boolean isDpWaimai, List<String> dpIds, JSONObject jsonObject) {
+    private void logItem(Boolean isDpWaimai, Set<String> dpIds, JSONObject jsonObject) {
         String hasTakeaway = jsonObject.getString("hasTakeaway");
         String dpId = jsonObject.getString("id");
-        if (dpIds.contains(dpId)) return;
-        else dpIds.add(dpId);
+//        if (dpIds.contains(dpId)) return;
+//        else
+        dpIds.add(dpId);
         if (null == isDpWaimai) {
             removeKeys(jsonObject);
             logger.info(jsonObject.toString());
