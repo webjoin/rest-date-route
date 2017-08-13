@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.AnjukeBeanMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.AnjukeBean">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="reqlisturl" jdbcType="VARCHAR" property="reqlisturl" />
+    <result column="reqdetailurl" jdbcType="VARCHAR" property="reqdetailurl" />
+    <result column="htotal" jdbcType="INTEGER" property="htotal" />
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="addr" jdbcType="VARCHAR" property="addr" />
+    <result column="enddate" jdbcType="VARCHAR" property="enddate" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="avg" jdbcType="DOUBLE" property="avg" />
+    <result column="trend" jdbcType="DOUBLE" property="trend" />
+    <result column="wytype" jdbcType="VARCHAR" property="wytype" />
+    <result column="wyfee" jdbcType="VARCHAR" property="wyfee" />
+    <result column="wyarea" jdbcType="VARCHAR" property="wyarea" />
+    <result column="houseqty" jdbcType="VARCHAR" property="houseqty" />
+    <result column="wybuildtime" jdbcType="VARCHAR" property="wybuildtime" />
+    <result column="parkingnum" jdbcType="VARCHAR" property="parkingnum" />
+    <result column="wyparkingnum" jdbcType="VARCHAR" property="wyparkingnum" />
+    <result column="volume" jdbcType="VARCHAR" property="volume" />
+    <result column="green" jdbcType="VARCHAR" property="green" />
+    <result column="developer" jdbcType="VARCHAR" property="developer" />
+    <result column="wycompany" jdbcType="VARCHAR" property="wycompany" />
+    <result column="salenum" jdbcType="INTEGER" property="salenum" />
+    <result column="rentnum" jdbcType="INTEGER" property="rentnum" />
+    <result column="page" jdbcType="INTEGER" property="page" />
+    <result column="totalpage" jdbcType="INTEGER" property="totalpage" />
+    <result column="house_geog" jdbcType="OTHER" property="houseGeog" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    reqlisturl, reqdetailurl, htotal, id, name, addr, enddate, lng, lat, avg, trend,
+    wytype, wyfee, wyarea, houseqty, wybuildtime, parkingnum, wyparkingnum, volume, green, 
+    developer, wycompany, salenum, rentnum, page, totalpage, house_geog
+  </sql>
+
+
+  <insert id="inserts" >
+    insert INTO anjuke(<include refid="Base_Column_List" />)
+    VALUES
+    <foreach collection="list" index="index" item="house" separator=",">
+      (
+      #{house.reqlisturl},
+      #{house.reqdetailurl},
+      #{house.htotal},
+      #{house.id},
+      #{house.name},
+      #{house.addr},
+      #{house.enddate},
+      #{house.lng},
+      #{house.lat},
+      #{house.avg},
+      #{house.trend},
+      #{house.wytype},
+      #{house.wyfee},
+      #{house.wyarea},
+      #{house.houseqty},
+      #{house.wybuildtime},
+      #{house.parkingnum},
+      #{house.wyparkingnum},
+      #{house.volume},
+      #{house.green},
+      #{house.developer},
+      #{house.wycompany},
+      #{house.salenum},
+      #{house.rentnum},
+      #{house.page},
+      #{house.totalpage},
+      ST_GeographyFromText(#{house.houseGeog})
+      )
+    </foreach>
+  </insert>
+
+</mapper>

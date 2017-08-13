@@ -68,10 +68,18 @@ public class GenerateBeans extends BaseDBTest {
         System.setProperty("bean_name","DpShopsBean"); //生成的类名
 
 
+        System.setProperty("table_name","anjuke");  //依据数据的表
+        System.setProperty("bean_name","AnjukeBean"); //生成的类名
+
+
 
         System.setProperty("url", "jdbc:mysql://127.0.0.1:3306/"+ds+"?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull");
         System.setProperty("user", "root");
         System.setProperty("passcode", "123456");
+        System.setProperty("driverClass", "com.mysql.jdbc.Driver");
+
+
+        System.setProperty("driverClass", "org.postgresql.Driver");
     }
 
 

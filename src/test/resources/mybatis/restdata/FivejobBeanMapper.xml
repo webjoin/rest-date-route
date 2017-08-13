@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.viewt.rest.mapper.restdata.FivejobBeanMapper">
+  <resultMap id="BaseResultMap" type="com.viewt.rest.entity.restdata.FivejobBean">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="oid" jdbcType="INTEGER" property="oid" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="companyname" jdbcType="VARCHAR" property="companyname" />
+    <result column="companytype" jdbcType="VARCHAR" property="companytype" />
+    <result column="fuli" jdbcType="VARCHAR" property="fuli" />
+    <result column="gzjy" jdbcType="VARCHAR" property="gzjy" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="jobname" jdbcType="VARCHAR" property="jobname" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="money" jdbcType="VARCHAR" property="money" />
+    <result column="peoplecount" jdbcType="VARCHAR" property="peoplecount" />
+    <result column="publishdate" jdbcType="VARCHAR" property="publishdate" />
+    <result column="xueli" jdbcType="VARCHAR" property="xueli" />
+    <result column="compeny_geog" jdbcType="OTHER" property="compenyGeog" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+     address, companyname, companytype, fuli, gzjy, industry, jobname, lat, lng,
+    money, peoplecount, publishdate, xueli, compeny_geog
+  </sql>
+
+
+  <insert id="inserts" >
+    insert INTO fivejob(<include refid="Base_Column_List" />)
+    VALUES
+    <foreach collection="list" index="index" item="com" separator=",">
+      (
+      #{com.address},
+      #{com.companyname},
+      #{com.companytype},
+      #{com.fuli},
+      #{com.gzjy},
+      #{com.industry},
+      #{com.jobname},
+      #{com.lat},
+      #{com.lng},
+      #{com.money},
+      #{com.peoplecount},
+      #{com.publishdate},
+      #{com.xueli},
+      ST_GeographyFromText(#{com.compenyGeog})
+      )
+    </foreach>
+  </insert>
+
+
+</mapper>

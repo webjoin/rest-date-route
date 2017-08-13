@@ -20,7 +20,7 @@
         <!--</commentGenerator>-->
 
 
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        <jdbcConnection driverClass="${driverClass}"
                         connectionURL="${url}"
                         userId="${user}"
                         password="${passcode}"/>

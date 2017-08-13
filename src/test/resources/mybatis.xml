@@ -21,7 +21,7 @@
         <environment id="local-postgre">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="driver" value="org.postgresql.Driver"/>
                 <property name="url" value="jdbc:postgresql://127.0.0.1:5432/rest-data"/>
                 <property name="username" value="postgres"/>
                 <property name="password" value="123456"/>
@@ -48,5 +48,7 @@
         <mapper resource="mybatis/restdata/DpCategoryBeanMapper.xml"/>
         <mapper resource="mybatis/restdata/DpShopListBeanMapper.xml"/>
         <mapper resource="mybatis/restdata/DpShopsBeanMapper.xml"/>
+        <mapper resource="mybatis/restdata/AnjukeBeanMapper.xml"/>
+        <mapper resource="mybatis/restdata/FivejobBeanMapper.xml"/>
     </mappers>
 </configuration>
