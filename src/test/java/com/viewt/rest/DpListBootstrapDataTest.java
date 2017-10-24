@@ -1,8 +1,10 @@
 package com.viewt.rest;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.viewt.rest.data.DpBootstrapIdsFile;
 import com.viewt.rest.data.test.db.DbBootstrap;
+import com.viewt.rest.data.util.FileUtil;
 import com.viewt.rest.entity.restdata.DpShopListBean;
 import com.viewt.rest.mapper.restdata.DpShopListBeanMapper;
 import org.apache.ibatis.session.SqlSession;
@@ -22,9 +24,10 @@ public class DpListBootstrapDataTest extends DbBootstrap {
     public static void main(String[] args) {
         DpListBootstrapDataTest data = new DpListBootstrapDataTest();
         String env = "local";
+        env = "pachong-aliyun-prod";
         data.initSqlSessionFactory(env);
-//        data.save2db();
-        data.save2db1();
+        data.save2db();
+//        data.save2db1();
     }
 
     private void save2db1() {
@@ -42,21 +45,25 @@ public class DpListBootstrapDataTest extends DbBootstrap {
         System.out.println(i);
     }
 
+    List<JSONObject> readJsonFromFile() {
+        String s = "/Users/Elijah/Desktop/self/rest-date-route/logs/other/other-dp-shop-list-items.log";
+        return FileUtil.readFile2Json(s);
+    }
+
     private void save2db() {
         String insertCategory = "insertCategory";
         String[] args = {"2"};
-        DpBootstrapIdsFile file = new DpBootstrapIdsFile();
-//        DpBootstrapIdsFile.main(args);
-        file.fetchDpIds(null);
-        List<JSONObject> items = file.items;
+        List<JSONObject> items = readJsonFromFile();
         int size = items.size();
-        int num = 10;
-        int page = (int) Math.ceil((double) size / num);
+
+        int page = 10000;
+        int num = (int) Math.ceil((double) size / page);
         for (int i = 0; i < num; i++) {
             int start = i * page;
             int end = start + page;
             if (start > size) break;
             if (end > size) end = size;
+            System.out.println(i + " -- " + start + " -- " + end);
             List<JSONObject> subKeys = items.subList(start, end);
             List<DpShopListBean> list = new ArrayList<>(subKeys.size());
             for (JSONObject subKey : subKeys) {
@@ -75,7 +82,7 @@ public class DpListBootstrapDataTest extends DbBootstrap {
             int i1 = mapper.inserts(list);
             sqlSession.commit();
             sqlSession.close();
-            System.out.println(i1);
+            System.out.println(i + "--->" + i1);
         }
     }
 

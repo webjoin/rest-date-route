@@ -18,6 +18,19 @@
                 <property name="poolPingEnabled" value="true"/>
             </dataSource>
         </environment>
+        <environment id="pachong-aliyun-prod">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://10.1.22.241:3306/pachong?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull" />
+                <property name="username" value="pachong" />
+                <property name="password" value="wwww.-.cn" />
+                <property name="poolMaximumActiveConnections" value="100" />
+                <property name="poolTimeToWait" value="5000" />
+                <property name="poolPingQuery" value="select 1 " />
+                <property name="poolPingEnabled" value="true" />
+            </dataSource>
+        </environment>
         <environment id="local-postgre">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">

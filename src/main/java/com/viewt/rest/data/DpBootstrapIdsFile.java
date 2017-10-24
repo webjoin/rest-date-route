@@ -85,7 +85,9 @@ public class DpBootstrapIdsFile {
 //                    logItem(isDpWaimai, dpIds, next);
 //                }
                 logItem(isDpWaimai, dpIds, shopItem);
+//                break;
             }
+//            break;
         }
         if (Boolean.FALSE == isDpWaimai) {
             for (String dpId : dpIds) {
@@ -100,13 +102,14 @@ public class DpBootstrapIdsFile {
     private void logItem(Boolean isDpWaimai, Set<String> dpIds, JSONObject jsonObject) {
         String hasTakeaway = jsonObject.getString("hasTakeaway");
         String dpId = jsonObject.getString("id");
-//        if (dpIds.contains(dpId)) return;
-//        else
-        dpIds.add(dpId);
+        if (dpIds.contains(dpId)) return;
+        else
+            dpIds.add(dpId);
         if (null == isDpWaimai) {
             removeKeys(jsonObject);
             logger.info(jsonObject.toString());
-            items.add(jsonObject);
+//            items.add(jsonObject);
+
         } else if (isDpWaimai) {
             if (!"true".equals(hasTakeaway)) return;
         } else

@@ -38,6 +38,7 @@ public abstract class DbBootstrap {
         try{
             sqlSession = sqlSessionFactory.openSession();
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
         return sqlSession;

@@ -36,16 +36,27 @@
     <!--
       WARNING - @mbg.generated
     -->
-    id, hotelBookable, bookable, hasTakeaway, hasPromo, regionName, hasMoPay, cityId, 
-    matchText, categoryName, newShop, memberCardId, altName, priceText, authorityLabelType, 
-    branchName, orderDish, shopPower, hasDeals, name, scoreText, shopType, queueable, 
-    categoryId, status, create_time
+    id, hotelBookable, bookable, hasTakeaway, hasPromo, regionName, hasMoPay, cityId,
+    matchText,
+    altName,
+    authorityLabelType,
+    scoreText,
+    categoryName, newShop, memberCardId,
+    priceText,
+    branchName, orderDish, shopPower, hasDeals, name,
+    shopType, queueable,
+    categoryId, status
+    <!-- , create_time -->
   </sql>
 
 
   <insert id="inserts">
 
-    insert INTO dp_shop_list(<include refid="Base_Column_List"/>)
+
+
+    insert INTO <!-- dp_shop_list -->
+    dianping_list_20170727
+    (<include refid="Base_Column_List"/>)
     VALUES
     <foreach collection="list" item="shop" index="index" separator=",">
       (
@@ -57,24 +68,25 @@
       #{shop.regionname},
       #{shop.hasmopay},
       #{shop.cityid},
-      #{shop.matchtext},
+       #{shop.matchtext},
+      #{shop.altname},
+      #{shop.authoritylabeltype},
+      #{shop.scoretext},
       #{shop.categoryname},
       #{shop.newshop},
       #{shop.membercardid},
-      #{shop.altname},
       #{shop.pricetext},
-      #{shop.authoritylabeltype},
       #{shop.branchname},
       #{shop.orderdish},
       #{shop.shoppower},
       #{shop.hasdeals},
       #{shop.name},
-      #{shop.scoretext},
       #{shop.shoptype},
       #{shop.queueable},
       #{shop.categoryid},
-      #{shop.status},
-      #{shop.createTime}
+      #{shop.status}
+      <!-- ,
+      #{shop.createTime} -->
       )
     </foreach>
 

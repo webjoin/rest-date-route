@@ -3,7 +3,8 @@ package com.viewt.rest.entity.restdata;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "dp_shop_list")
+//@Table(name = "dp_shop_list")
+@Table(name = "dianping_list_20170727")
 public class DpShopListBean {
     /**
      * 92753651

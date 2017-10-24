@@ -1,5 +1,8 @@
 package com.viewt.rest.data.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,10 +15,11 @@ import java.util.List;
  */
 public class FileUtil {
 
-    public static  List<String> readFile(String path){
+    public static List<String> readFile(String path) {
         return readFile(path, null);
     }
-    public static  List<String> readFile(String path, String prefix) {
+
+    public static List<String> readFile(String path, String prefix) {
         List<String> list = new ArrayList<>();
         InputStreamReader fr = null;
         BufferedReader br = null;
@@ -33,6 +37,39 @@ public class FileUtil {
                         list.add(line.substring(ix));
                     }
                 }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fr != null) {
+                try {
+                    fr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return list;
+    }
+
+    public static List<JSONObject> readFile2Json(String path) {
+        List<JSONObject> list = new ArrayList<>();
+        InputStreamReader fr = null;
+        BufferedReader br = null;
+        try {
+            fr = new InputStreamReader(new FileInputStream(path), "utf-8");
+            br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                list.add(JSON.parseObject(line));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
