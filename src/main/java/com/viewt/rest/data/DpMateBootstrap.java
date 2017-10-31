@@ -34,7 +34,9 @@ public class DpMateBootstrap extends BaseBootstrap {
 
         for (int i = 0; i < dp_cityIds.length; i++) {
             String cityId = dp_cityIds[i];
-            if ("1".equals(cityId)) continue;
+            if ("1".equals(cityId)) {
+                continue;
+            }
             String formatUrl = MessageFormat.format(s, cityId, cityId);
             RespBean contentByUrl = urlService.getContentByUrl(formatUrl, reqHeader);
             String content = contentByUrl.getContent();

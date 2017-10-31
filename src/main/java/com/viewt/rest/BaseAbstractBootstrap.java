@@ -306,7 +306,9 @@ public class BaseAbstractBootstrap {
     static long sStastic = 0;
 
     private void plus() {
-        if (stastic == 0) sStastic = System.currentTimeMillis();
+        if (stastic == 0) {
+            sStastic = System.currentTimeMillis();
+        }
         stastic++;
 
 
@@ -375,9 +377,9 @@ public class BaseAbstractBootstrap {
                 }
             } catch (Exception e) {
                 hasException = true;
-                if (StringUtils.isNotEmpty(resp))
+                if (StringUtils.isNotEmpty(resp)) {
                     logger.info("seq {} url:[{}] break - {} - {}", flag--, url, e.getMessage(), resp.substring(0, 10));
-                else {
+                } else {
                     logger.info("seq {} url:[{}] break - {}", flag--, url, e.getMessage());
                 }
                 sleep();
@@ -387,7 +389,9 @@ public class BaseAbstractBootstrap {
                 }
             }
         } while (flag >= 0);
-        if (null == resp) resp = "";
+        if (null == resp) {
+            resp = "";
+        }
         return resp;
     }
 
@@ -406,14 +410,14 @@ public class BaseAbstractBootstrap {
 
     private void addTimestamp1() {
         if (timestamp1 == 0) {
-            timestamp1 = new Date().getTime();
+            timestamp1 = System.currentTimeMillis();
         }
         timestamp1++;
     }
 
     public long getTimestamp1() {
         if (timestamp1 == 0) {
-            timestamp1 = new Date().getTime();
+            timestamp1 = System.currentTimeMillis();
         }
         return timestamp1;
     }
@@ -429,6 +433,7 @@ public class BaseAbstractBootstrap {
             }
 
         }).scheduleAtFixedRate(new Runnable() {
+            @Override
             public void run() {
                 addTimestamp1();
             }
@@ -446,7 +451,7 @@ public class BaseAbstractBootstrap {
 
     //http://mapi.dianping.com/searchshop.json?start={start}&regionid={regionid}&categoryid={categoryid}&sortid=0&locatecityid={cityid}&cityid={cityid}&_={timestamp}&callback=Zepto{timestamp1}";
     protected String geSearchtUrl1(String start, String cityid, String categoryId, String regionId) {
-        long timestamp = new Date().getTime();
+        long timestamp = System.currentTimeMillis();
         String rsurl = "url1";
         rsurl = rsurl.replace("{start}", String.valueOf(start));
         rsurl = rsurl.replace("{categoryId}", String.valueOf(categoryId));

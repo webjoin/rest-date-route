@@ -43,8 +43,12 @@ public class DpMeituanWaimaiBootstrap extends BaseBootstrap {
         int i = 0;
         for (String item : list) {
             i++;
-            if (i < start || i > end) continue;
-            if (StringUtils.isEmpty(item)) continue;
+            if (i < start || i > end) {
+                continue;
+            }
+            if (StringUtils.isEmpty(item)) {
+                continue;
+            }
             String[] split = item.split(",");
             String dpId;
             if (split.length >= 2) {

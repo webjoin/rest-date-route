@@ -123,7 +123,9 @@ public class AnjunkeBootstap {
                         String group = listTotalHouseMatch.group(1);
                         htotal = Integer.parseInt(group);
                     }
-                    if (htotal == 0) break;
+                    if (htotal == 0) {
+                        break;
+                    }
                 }
                 if (htotalPage == 0) {
                     htotalPage = (int) Math.ceil((double) htotal / 30);

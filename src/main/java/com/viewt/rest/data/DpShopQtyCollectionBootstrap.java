@@ -308,8 +308,9 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
                 String subCategoryName = subMather.group(2);
                 DpCategoryNavsBean bean = new DpCategoryNavsBean(Integer.parseInt(subCategoryId), subCategoryName, parentCategoryId);
                 if ((parentCategoryId + "").equals(subCategoryId)) {
-                } else
+                } else {
                     list.add(bean);
+                }
             }
         }
         return list;

@@ -52,7 +52,7 @@ public class DpBootstrapIdsFile {
         path = "/Users/Elijah/Downloads/baidu-company-crawler-data/other-dp-shops/dp";
         path = "/Users/Elijah/Downloads/baidu-company-crawler-data/dp-shop-list/dp";
 //        path = Cons.USER_DIR + "/logs/other/other-" + System.getProperty("list") + ".log";
-        if (Boolean.FALSE == isDpWaimai) {
+        if (Objects.equals(Boolean.FALSE, isDpWaimai)) {
             System.out.println("a....");
         }
         File file = new File(path);
@@ -64,13 +64,19 @@ public class DpBootstrapIdsFile {
         }
         Set<String> dpIds = new HashSet<>();
         for (File file1 : files) {
-            if (!file1.isFile() || !file1.getName().startsWith("other")) continue;
+            if (!file1.isFile() || !file1.getName().startsWith("other")) {
+                continue;
+            }
             System.out.println(file1.getAbsoluteFile());
             List<String> list = FileUtil.readFile(file1.getAbsolutePath());
             for (String s : list) {
-                if (StringUtils.isEmpty(s)) continue;
+                if (StringUtils.isEmpty(s)) {
+                    continue;
+                }
                 s = s.trim();
-                if (!s.startsWith("{")) continue;
+                if (!s.startsWith("{")) {
+                    continue;
+                }
                 JSONObject shopItem;
                 try {
                     shopItem = JSON.parseObject(s);
@@ -89,7 +95,7 @@ public class DpBootstrapIdsFile {
             }
 //            break;
         }
-        if (Boolean.FALSE == isDpWaimai) {
+        if (Objects.equals(Boolean.FALSE, isDpWaimai)) {
             for (String dpId : dpIds) {
                 logger.info("{}", dpId);
             }
@@ -102,18 +108,23 @@ public class DpBootstrapIdsFile {
     private void logItem(Boolean isDpWaimai, Set<String> dpIds, JSONObject jsonObject) {
         String hasTakeaway = jsonObject.getString("hasTakeaway");
         String dpId = jsonObject.getString("id");
-        if (dpIds.contains(dpId)) return;
-        else
+        if (dpIds.contains(dpId)) {
+            return;
+        } else {
             dpIds.add(dpId);
+        }
         if (null == isDpWaimai) {
             removeKeys(jsonObject);
             logger.info(jsonObject.toString());
 //            items.add(jsonObject);
 
         } else if (isDpWaimai) {
-            if (!"true".equals(hasTakeaway)) return;
-        } else
+            if (!"true".equals(hasTakeaway)) {
+                return;
+            }
+        } else {
             logger.info("{}", dpId);
+        }
     }
 
     private void removeKeys(JSONObject jsonObject) {

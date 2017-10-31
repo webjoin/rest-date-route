@@ -118,8 +118,9 @@ public class HttpUtil {
         RequestConfig customizedRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
         CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(customizedRequestConfig).build();
         HttpGet httpGet = new HttpGet(url);
-        if (StringUtils.isNotEmpty(cookies))
+        if (StringUtils.isNotEmpty(cookies)) {
             httpGet.addHeader("Cookie", cookies);
+        }
         httpGet.addHeader("Cookie", DpThreadContext.getThreadCookie());
         httpGet.addHeader("User-Agent", userAgents[random.nextInt(userAgents.length)]);
         boolean isViaProxy = setProxy(proxyHost, proxyPort, httpGet, timeoutMiniSeconds);
@@ -155,7 +156,9 @@ public class HttpUtil {
                 if ("Set-Cookie".equals(allHeaders[i].getName())) {
                     String value = allHeaders[i].getValue();
                     int i1 = value.indexOf("=");
-                    if (i1 <= -1) continue;
+                    if (i1 <= -1) {
+                        continue;
+                    }
                     int i2 = value.indexOf(";");
                     String key = value.substring(0, i1);
                     switch (key) {

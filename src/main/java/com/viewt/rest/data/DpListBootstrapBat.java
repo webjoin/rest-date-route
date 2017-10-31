@@ -47,6 +47,7 @@ public class DpListBootstrapBat extends BaseBootstrap {
         return rs;
     }
 
+    @Override
     public void crawl(String[] args) {
         if (null == args || 0 == args.length) {
             List<String> rs = parseCategoryQtyLog();
@@ -63,8 +64,12 @@ public class DpListBootstrapBat extends BaseBootstrap {
         for (int i = 0; i < num; i++) {
             int start = i * page;
             int end = start + page;
-            if (start > size) break;
-            if (end > size) end = size;
+            if (start > size) {
+                break;
+            }
+            if (end > size) {
+                end = size;
+            }
             String[] strings = Arrays.copyOfRange(args, start, end);
             //TODO to do thing ...
             try {

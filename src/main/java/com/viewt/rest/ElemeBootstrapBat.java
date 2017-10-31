@@ -96,8 +96,9 @@ public class ElemeBootstrapBat {
         br1.write("@echo off\r\n");
         int i2 = 0;
 //                    shopAreas
-        if (0 == i2)
+        if (0 == i2) {
             br1.write("cd ../\r\n");
+        }
 
         br1.write("\r\n");
         for (int i1 = 0; i1 < args1.length; i1++) {

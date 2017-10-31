@@ -7,7 +7,7 @@
             <!--<ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT"/>-->
         </Console>
 
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE" immediateFlush="false" fileName="logs/mt/wm-${sys:area}.log"
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE"  fileName="logs/mt/wm-${sys:area}.log"
                                  filePattern="logs/mt/$${date:yyyyMM}/wm-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8"
                            pattern="%m%n"/>
@@ -18,7 +18,7 @@
             <DefaultRolloverStrategy max="200"/>
         </RollingRandomAccessFile>
 
-        <!--<RollingRandomAccessFile name="OTHER_LOG_FILE" immediateFlush="false"-->
+        <!--<RollingRandomAccessFile name="OTHER_LOG_FILE" -->
         <RollingRandomAccessFile name="OTHER_LOG_FILE"
                                  fileName="logs/other/other-${sys:area}.log"
                                  filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
@@ -33,7 +33,7 @@
             <DefaultRolloverStrategy max="6000"/>
         </RollingRandomAccessFile>
 
-        <RollingRandomAccessFile name="OTHER_LOG_FILE_ERR"   immediateFlush="false"
+        <RollingRandomAccessFile name="OTHER_LOG_FILE_ERR"   
                                  fileName="logs/other/other-${sys:area}-err.log"
                                  filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-err-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
@@ -48,7 +48,7 @@
         </RollingRandomAccessFile>
 
 
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE1" immediateFlush="false"
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE1" 
                                  fileName="logs/ele/wm-ele-${sys:area}.log"
                                  filePattern="logs/ele/$${date:yyyyMM}/wm-ele-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
@@ -59,7 +59,7 @@
             </Policies>
             <DefaultRolloverStrategy max="200"/>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="SERVICE_LOG_FILE1-error" immediateFlush="false"
+        <RollingRandomAccessFile name="SERVICE_LOG_FILE1-error" 
                                  fileName="logs/ele/wm-ele-err.log"
                                  filePattern="logs/ele/$${date:yyyyMM}/wm-ele-err-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>

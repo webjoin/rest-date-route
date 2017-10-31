@@ -6,6 +6,7 @@ import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.bean.RespSelectBean;
 import com.viewt.rest.data.service.UrlService;
 import com.viewt.rest.data.service.impl.UrlServiceImpl;
+import com.viewt.rest.data.util.Cons;
 import com.viewt.rest.data.util.Log4jUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,8 @@ public class WaimaiBootstrap extends BaseAbstractBootstrap {
      */
     public final static String[] shopArea1 = {"中山路/轮渡", "火车站", "厦门大学", "环岛路沿线", "仙岳路沿线", "曾厝垵", "禾祥西路", "莲坂", "嘉禾路", "莲花", "莲前大道", "白鹭洲公园", "前埔/软件园", "瑞景", "市政府", "松柏", "黄厝", "体育路", "SM/江头", "仙岳路沿线", "湖里万达", "SM广场", "湖里公园", "枋湖", "东渡", "五缘湾乐都汇", "蔡塘广场", "塘边", "殿前", "高崎", "金尚小区", "马垅", "泰和花园", "金山小区", "五缘湾建发湾悦城", "新景国际外滩", "悦享中心", "集美学村", "杏林", "集美万达广场", "孙厝新华都", "厦门北站", "旺角", "灌口", "园博苑", "海沧商业圈", "阿罗海城市广场", "东孚", "新垵", "海裕路", "汽车站/城南路", "城西/祥平街道", "城东/岳口", "梧侣/康亭", "同安老城区/钟楼", "同安乐海广场", "后田海鲜船坞", "乌涂商业街", "新店", "马巷", "大嶝岛", "鼓浪屿风景区", "体育中心", "世贸商城", "罗宾森广场", "瑞景商业广场", "加州商业广场", "国贸广场", "明发商业广场", "巴黎春天中山路店", "名汇广场", "香港广场", "老虎城", "厦门大学正门", "富万邦商业广场", "白鹭洲", "磐基中心", "国际会展中心", "国际邮轮中心码头", "SM城市广场", "东方巴黎广场", "SM新生活广场", "万达广场", "嘉庚体育馆", "财经学院"};
 
-    public final static String[] cityNames = {"厦门","上海"};
-    public final static String[] cityPys = {"xiamen","shanghai"};
 
-    public final static String[] mt_cityIds = {"350200",""};
+
 //    public final static String[] dp_cityIds = { "15"/*,"1"*/};//, "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16", "17", "18", "19", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "55", "56", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "78", "79", "80", "83", "84", "86", "88", "90", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178", "179", "180", "181", "182", "183", "184", "185", "186", "187", "189", "191", "192", "193", "194", "195", "196", "197", "198", "199", "200", "201", "202", "203", "205", "206", "207", "208", "209", "210", "211", "212", "213", "214", "215", "216", "217", "218", "219", "220", "221", "222", "223", "224", "225", "226", "227", "228", "229", "230", "231", "232", "233", "234", "238", "239", "240", "241", "242", "243", "244", "245", "246", "247", "248", "249", "250", "252", "253", "254", "255", "258", "260", "261", "267", "268", "269", "270", "276", "279", "291", "292", "293", "294", "295", "296", "297", "299", "301", "303", "307", "308", "310", "313", "321", "324", "325", "328", "341", "342", "344", "345", "358", "398", "1368", "2335", "2341" };
 
     public final static String[] dp_cityIds = {
@@ -96,9 +95,9 @@ public class WaimaiBootstrap extends BaseAbstractBootstrap {
     private void crawl(int start, int end) {
 
         int city_index = 0;
-        String city_id = mt_cityIds[city_index];
-        String cityName = cityNames[city_index];
-        String cityPy = cityPys[city_index];
+        String city_id = Cons.Meituan.PC_CITY_IDS[city_index];
+        String cityName =  Cons.Meituan.CITY_NAMES[city_index];
+        String cityPy =  Cons.Meituan.CITY_PYS[city_index];
         String keywords;
 
         UrlService service = new UrlServiceImpl();
@@ -239,8 +238,11 @@ public class WaimaiBootstrap extends BaseAbstractBootstrap {
     }
 
     private String ifNull(String obj, String defaultValue) {
-        if (null == obj) return defaultValue;
-        else return obj.toString();
+        if (null == obj) {
+            return defaultValue;
+        } else {
+            return obj.toString();
+        }
     }
 
     public void getWaimaiShopList() {
@@ -311,7 +313,8 @@ public class WaimaiBootstrap extends BaseAbstractBootstrap {
 
             UrlService service = new UrlServiceImpl();
             // it works  true
-            RespBean post = service.post(url.toString(), map, encoding, reqHeader);
+//            service.executePostFrom()
+            RespBean post = service.executePostFrom(url.toString(), map, reqHeader);
             if (StringUtils.isEmpty(post.getContent())) {
                 break;
             }

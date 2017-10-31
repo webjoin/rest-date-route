@@ -8,6 +8,7 @@ import com.viewt.rest.WaimaiBootstrap;
 import com.viewt.rest.data.bean.DpDataBean;
 import com.viewt.rest.data.bean.RespBean;
 import com.viewt.rest.data.service.UrlService;
+import com.viewt.rest.data.service.impl.AbstractService;
 import com.viewt.rest.data.service.impl.UrlServiceImpl;
 import com.viewt.rest.data.util.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -37,24 +38,11 @@ public class DpShopBootstrap extends BaseBootstrap {
     public static void main(String[] args) {
         DpShopBootstrap bootstrap = new DpShopBootstrap();
         bootstrap.start(args);
-//        List<String> ls = new ArrayList<>();
-//        ls.add("aaa");
-//        ls.add("bb");
-//        ls.add("cc");
-//        List<String> list = ls.subList(1, 3);
-//        String[] strings = list.toArray(new String[list.size()]);
-//        list.clear();
-//        list = null;
-//        ls.clear();
-//        for (String string : strings) {
-//            System.out.println(string);
-//        }
-//        System.out.println(ls.size());
     }
 
     @Override
     public void crawl(String[] args) {
-        int start = 1;
+        int start = 0;
         int end = 0;
         String log = "";
         if (args.length >= 1) {
@@ -85,10 +73,12 @@ public class DpShopBootstrap extends BaseBootstrap {
         logger.error("开始{}，结束{}", start, end);
         for (String item : strings) {
             i++;
-            logger.error("doing... {}", start + i); //21:34 started
-            if (StringUtils.isEmpty(item)) continue;
+            logger.error("doing... {}", (start + i) + "/" + end); //21:34 started
+            if (StringUtils.isEmpty(item)) {
+                continue;
+            }
             getItemData(item);
-            logger.error("end doing... {}", i); //21:34 started
+            logger.error("end doing... {}", (start + i) + "/" + end); //21:34 started
         }
 //        getItemData("3471487");
     }
@@ -105,22 +95,53 @@ public class DpShopBootstrap extends BaseBootstrap {
     //推荐菜
 //    String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId=69996989&cityId=1&shopName=%E5%B1%B1%E4%BA%BA%E7%91%B6&power=5&mainCategoryId=252&shopType=10&shopCityId=1";
     String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power=5&mainCategoryId={categoryId}&shopType=10&shopCityId={cityId}&_token=eJxVjFtPgzAAhf9Ln5tRSjs63ia6BXRGLuOi4QEYDtRyazPIjP%2FdLvLi03fy5ZzzDUbnBCwdIUR0CKRQmSKMN5hSTDCBoPzvqKFqxRjdA%2BtNJ4hCg9HsZnwllCEIbhDK4F9kpplB9YLJreOoCqil7C1Nm6ZpdWrytm%2Fa86rsuCbqrtfWzNBNQhmAAKgFD9VC8XNhvlAuFM25BRao3DkMBBHDu38Q4RFFpXy%2BHuZr2MxuWLLLthPp%2FrGLqFu1O8nzoY5aeleSaY7t6sGOeRrPXcHdwYtTk1Ypx6M57l8aZCRF0qxf2VNw2QVTfvzinv3hO7a3HWmQTODnF63GXYE%3D";
-//    String shopTabs1= "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={}&cityId={}        &shopName={}        &power=5&mainCategoryId=210         &shopType=10&shopCityId=1058    &_token=eJxVi9tOg0AURf%2FlPE%2FKMMzAlMQHbWkdpDVyi9b0gV4oiFBgiBSM%2F%2B409sXk5Kydlb2%2FoRUHsHWMMdURdFJlhgkx1bOMKUaw%2F%2B%2BYodyujedgv%2BsUM2Rwtr0aXwllKEZTjLfoL3LL2iJC1V07QlUg67ra1rS%2B7yeHPKnqvDpN9udSk9m51jjWqWUSDghALcpQLRSLG5MbuxtlfqrAhqN7CQNJZZP6KxlGeOXFLwM2VuPj%2BtlzPtfjwGe5X2yWzSlm7rFadGXSZHHFHvZUDMWCvy3krF%2FPHTUR%2FUfqjY6hp5uasKEyrWT66rWE7QSRy0xsIqeJBA%2Fu3eDJ%2FaJ38PMLm4lcqQ%3D%3D";
+    //    String shopTabs1= "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={}&cityId={}        &shopName={}        &power=5&mainCategoryId=210         &shopType=10&shopCityId=1058    &_token=eJxVi9tOg0AURf%2FlPE%2FKMMzAlMQHbWkdpDVyi9b0gV4oiFBgiBSM%2F%2B409sXk5Kydlb2%2FoRUHsHWMMdURdFJlhgkx1bOMKUaw%2F%2B%2BYodyujedgv%2BsUM2Rwtr0aXwllKEZTjLfoL3LL2iJC1V07QlUg67ra1rS%2B7yeHPKnqvDpN9udSk9m51jjWqWUSDghALcpQLRSLG5MbuxtlfqrAhqN7CQNJZZP6KxlGeOXFLwM2VuPj%2BtlzPtfjwGe5X2yWzSlm7rFadGXSZHHFHvZUDMWCvy3krF%2FPHTUR%2FUfqjY6hp5uasKEyrWT66rWE7QSRy0xsIqeJBA%2Fu3eDJ%2FaJ38PMLm4lcqQ%3D%3D";
     //大家认为  包含了 评论数量
 //    String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId=69996989&cityId=1&categoryURLName=food&power=5&cityEnName=shanghai&shopType=10";
     String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId={id}&cityId={cityId}&categoryURLName=food&power={power}&cityEnName={cityEnName}&shopType={shopType}&_token=eJxVjFtPgzAAhf9Ln5tRSjs63ia6BXRGLuOi4QEYDtRyazPIjP%2FdLvLi03fy5ZzzDUbnBCwdIUR0CKRQmSKMN5hSTDCBoPzvqKFqxRjdA%2BtNJ4hCg9HsZnwllCEIbhDK4F9kpplB9YLJreOoCqil7C1Nm6ZpdWrytm%2Fa86rsuCbqrtfWzNBNQhmAAKgFD9VC8XNhvlAuFM25BRao3DkMBBHDu38Q4RFFpXy%2BHuZr2MxuWLLLthPp%2FrGLqFu1O8nzoY5aeleSaY7t6sGOeRrPXcHdwYtTk1Ypx6M57l8aZCRF0qxf2VNw2QVTfvzinv3hO7a3HWmQTODnF63GXYE%3D";
 
     private Map<String, String> reqHeader = new HashMap<>();
 
+    private int agentVersion = 539;
+    private int agentVersion1 = 39;
+
     private void getItemData(String dpId) {
 
         DpDataBean dpDataBean = new DpDataBean();
         dpDataBean.setId(Long.parseLong(dpId));
-        String cookie = "_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; cityid=1; default_ab=shop%3AA%3A1; _lxsdk_cuid=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; _lxsdk=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; s_ViewType=10; JSESSIONID=73ACF16622538BC6BC4E2BAEDE35CE9A; __mta=253147702.1502292209388.1502292209388.1502292229508.2; aburl=1; cy=15; cye=xiamen; _lxsdk_s=15dc797ec93-0c3-bc-f12%7C%7C38";
+        String cookie = "_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; __utma=1.273174031.1502295108.1502295108.1503042379.2; __utmz=1.1502295108.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _lxsdk_cuid=15e7a8f15e8c8-0363c970cd6c52-31617e02-13c680-15e7a8f15e8c8; _lxsdk=15e7a8f15e8c8-0363c970cd6c52-31617e02-13c680-15e7a8f15e8c8; aburl=1; cye=shanghai; __mta=242980797.1505294753697.1505294753697.1506055164909.2; cityid=1; share_ab=shop%3AA%3A3; cy=1; s_ViewType=10; _lxsdk_s=15f4d3f46dc-11-ce4-c54%7C%7C27";
+        cookie = "_lxsdk_s=%7C%7C0";
         reqHeader.put("Cookie", cookie);
-
         reqHeader.put("User-Agent", Cons.PC_USER_AGENT);
-        RespBean shopRespBean = urlService.getContentByUrl(dpShopUrl.replace("{id}", dpId), reqHeader);
+
+//        reqHeader.put("Host","www.dianping.com");
+//        reqHeader.put("User-Agent","Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:56.0) Gecko/20100101 Firefox/56.0");
+//        reqHeader.put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+//        reqHeader.put("Accept-Language","ja,zh-CN;q=0.8,zh;q=0.6,en-US;q=0.4,en;q=0.2");
+//        reqHeader.put("Accept-Encoding","gzip, deflate");
+//        reqHeader.put("Cookie","_lxsdk_s=15f4ef692c5-e5e-c01-6e6%7C%7C28; _lxsdk_cuid=15f4ef692c3c8-0be453a17a453b8-49576c-13c680-15f4ef692c3c8; _lxsdk=15f4ef692c3c8-0be453a17a453b8-49576c-13c680-15f4ef692c3c8; _hc.v=74fc0682-6ef0-6877-95f0-bca6c815d64e.1508858303");
+//        reqHeader.put("Cookie","_lxsdk_s=%7C%7C0");
+//        reqHeader.put("Connection","keep-alive");
+//        reqHeader.put("Upgrade-Insecure-Requests","1");
+//        reqHeader.put("Upgrade-Insecure-Requests","1");
+//        reqHeader.put("Cache-Control","no-cache");
+//        reqHeader.put("Pragma","no-cache");
+
+        reqHeader.put("Host", "www.dianping.com");
+        reqHeader.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+        reqHeader.put("Accept-Language", "zh,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4");
+        reqHeader.put("Accept-Encoding", "gzip, deflate");
+        reqHeader.put("Cache-Control", "no-cache");
+        reqHeader.put("Connection", "keep-alive");
+        reqHeader.put("Pragma", "no-cache");
+        reqHeader.put("Upgrade-Insecure-Requests", "1");
+        reqHeader.put("Cookie", "_lxsdk_s=%7C%7C0"); //249
+
+        reqHeader.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/" + agentVersion + "." + agentVersion1);
+        System.out.println("agentVersion-------->>>" + agentVersion++ + "-->>agentVersion1-->" + agentVersion1++);
+
+//        RespBean shopRespBean = urlService.getContentByUrl1(dpShopUrl.replace("{id}", dpId),reqHeader);
+        RespBean shopRespBean = urlService.getContentByUrl(dpShopUrl.replace("{id}", dpId) + "?" + System.currentTimeMillis(), reqHeader);
         parseShopRespBean(shopRespBean, dpDataBean);
         dpDataBean.setId(Long.parseLong(dpId));
 
@@ -131,41 +152,37 @@ public class DpShopBootstrap extends BaseBootstrap {
             logger.error(dpId + " this id has some problem ... 貌似这个id有问题哈。。。。");
             return;
         }
-        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
-        String mShopUrl = dpMShopUrl.replace("{id}", dpId);
-        RespBean dpMShopRespBean = urlService.getContentByUrl(mShopUrl, reqHeader);
-        parseMShopRespBean(dpMShopRespBean, dpDataBean);
-        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
-//        String shopTabs = "http://www.dianping.com/ajax/json/shopDynamic/shopTabs?shopId={id}&cityId={cityId}&shopName={shopName}&power={power}&mainCategoryId={categoryId}&shopType=10&shopCityId={shopCityId}";
+//        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
+//        String mShopUrl = dpMShopUrl.replace("{id}", dpId);
+//        RespBean dpMShopRespBean = urlService.getContentByUrl(mShopUrl, reqHeader);
+//        parseMShopRespBean(dpMShopRespBean, dpDataBean);
+//        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
 
 
+//        reqHeader.put("Cookie","_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; __utma=1.273174031.1502295108.1502295108.1503042379.2; __utmz=1.1502295108.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _lxsdk_cuid=15e7a8f15e8c8-0363c970cd6c52-31617e02-13c680-15e7a8f15e8c8; _lxsdk=15e7a8f15e8c8-0363c970cd6c52-31617e02-13c680-15e7a8f15e8c8; aburl=1; cye=shanghai; __mta=242980797.1505294753697.1505294753697.1506055164909.2; cityid=1; share_ab=shop%3AA%3A3; cy=1; s_ViewType=10; _lxsdk_s=15f4d3f46dc-11-ce4-c54%7C%7C27");
 
+//        String shopTabsUrl =
+//                shopTabs.replace("{id}", dpId)
+//                        .replace("{cityId}", dpDataBean.getCityId() + "")
+//                        .replace("{shopName}", CodeUtil.urlEecode(dpDataBean.getFullName()))
+//                        .replace("{power}", dpDataBean.getPower() + "")
+//                        .replace("{categoryId}", dpDataBean.getMainCategoryId() + "")
+//                        .replace("{shopCityId}", dpDataBean.getShopCityId() + "");
+//
+//        RespBean shopTabsRespBean = urlService.getContentByUrl(shopTabsUrl, reqHeader);
+//        parseShopTabsRespBean(shopTabsRespBean, dpDataBean);
 
-        reqHeader.put("Cookie","_hc.v=50fdc104-3464-64f6-2867-8506bfb03f7f.1502264668; cityid=1; default_ab=shop%3AA%3A1; _lxsdk_cuid=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; _lxsdk=15dc61dac51c8-0f3075106ef6b5-3067780b-13c680-15dc61dac52c8; s_ViewType=10; JSESSIONID=73ACF16622538BC6BC4E2BAEDE35CE9A; __mta=253147702.1502292209388.1502292209388.1502292229508.2; aburl=1; cy=15; cye=xiamen; _lxsdk_s=15dc797ec93-0c3-bc-f12%7C%7C38");
-
-        String shopTabsUrl =
-                shopTabs.replace("{id}", dpId)
-                        .replace("{cityId}", dpDataBean.getCityId() + "")
-                        .replace("{shopName}", CodeUtil.urlEecode(dpDataBean.getFullName()))
-                        .replace("{power}", dpDataBean.getPower() + "")
-                        .replace("{categoryId}", dpDataBean.getMainCategoryId() + "")
-                        .replace("{shopCityId}", dpDataBean.getShopCityId() + "");
-
-        RespBean shopTabsRespBean = urlService.getContentByUrl(shopTabsUrl, reqHeader);
-        parseShopTabsRespBean(shopTabsRespBean, dpDataBean);
-
-        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
-//        String allReview = "http://www.dianping.com/ajax/json/shopDynamic/allReview?shopId={id}&cityId={cityId}&categoryURLName={categoryURLName}&power={power}&cityEnName={cityEnName}&shopType={shopType}";
-        String allReviewUrl =
-                allReview.replace("{id}", dpId)
-                        .replace("{cityId}", dpDataBean.getCityId() + "")
-                        .replace("{categoryURLName}", dpDataBean.getCategoryURLName())
-                        .replace("{power}", dpDataBean.getPower() + "")
-                        .replace("{cityEnName}", dpDataBean.getCityEnName())
-                        .replace("{shopType}", dpDataBean.getShopType() + "");
-
-        RespBean allReviewRespBean = urlService.getContentByUrl(allReviewUrl, reqHeader);
-        parseAllReviewRespBean(allReviewRespBean, dpDataBean);
+//        reqHeader.put("User-Agent", Cons.MOBILE_USER_AGENT);
+//        String allReviewUrl =
+//                allReview.replace("{id}", dpId)
+//                        .replace("{cityId}", dpDataBean.getCityId() + "")
+//                        .replace("{categoryURLName}", dpDataBean.getCategoryURLName())
+//                        .replace("{power}", dpDataBean.getPower() + "")
+//                        .replace("{cityEnName}", dpDataBean.getCityEnName())
+//                        .replace("{shopType}", dpDataBean.getShopType() + "");
+//
+//        RespBean allReviewRespBean = urlService.getContentByUrl(allReviewUrl, reqHeader);
+//        parseAllReviewRespBean(allReviewRespBean, dpDataBean);
         saveBean(dpDataBean);
     }
 
@@ -206,9 +223,9 @@ public class DpShopBootstrap extends BaseBootstrap {
                 }
             }
             while (telMatcher.find()) {
-                if (bean.getTel() != null)
+                if (bean.getTel() != null) {
                     bean.setTel(bean.getTel() + "," + telMatcher.group(1));
-                else {
+                } else {
                     bean.setTel(telMatcher.group(1));
                 }
             }

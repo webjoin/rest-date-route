@@ -265,7 +265,9 @@ public class ElemeBootstrap {
                 next1.remove("tips");
                 JSONObject activity = JSONUtil.getJSONObject(next1, "activity");
 
-                if (activity == null) continue;
+                if (activity == null) {
+                    continue;
+                }
                 activity.remove("icon_color");
                 activity.remove("image_text_color");
                 activity.remove("applicable_quantity_text");

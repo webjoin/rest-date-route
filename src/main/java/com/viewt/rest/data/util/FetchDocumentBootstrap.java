@@ -27,9 +27,9 @@ public class FetchDocumentBootstrap {
             throw new IllegalArgumentException(sourcePath + " 目标文件已经存在");
         }
         List<String> list = new ArrayList<>();
-        if (sourceFile.isFile())
+        if (sourceFile.isFile()) {
             list = readFileLines(sourcePath);
-        else if (sourceFile.isDirectory()) {
+        } else if (sourceFile.isDirectory()) {
             File[] files = sourceFile.listFiles();
             for (File file : files) {
                 if (file.isFile()) {
@@ -60,7 +60,9 @@ public class FetchDocumentBootstrap {
         int line = 0;
         for (String s : list) {
             line++;
-            if (s == null || s.isEmpty()) continue;
+            if (s == null || s.isEmpty()) {
+                continue;
+            }
             int ii = 0;
             int i = s.indexOf(objSymbolS);
             boolean isObj = false;
@@ -115,8 +117,9 @@ public class FetchDocumentBootstrap {
 
 
         try {
-            if (osw == null)
+            if (osw == null) {
                 osw = new OutputStreamWriter(new FileOutputStream(destPath, true));
+            }
 
             osw.write(lineContent + "\r\n");
 

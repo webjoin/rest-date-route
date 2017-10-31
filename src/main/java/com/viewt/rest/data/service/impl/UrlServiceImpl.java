@@ -39,6 +39,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
     }
 
 
+
     //    Logger
 
     @Override
@@ -147,6 +148,18 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         return respBean;
     }
 
+    @Override
+    public RespBean executePostFrom(String url,Map<String,String> formMap,Map<String,String> header) {
+        RespBean respBean = this.executePostFrom(url,formMap,encoding,header);
+        return respBean;
+    }
+
+    @Override
+    public RespBean executePostJson(String url, String reqBodyJson, Map<String, String> header) {
+        RespBean respBean = this.executePostJson(url,reqBodyJson,encoding,header);
+        return respBean;
+    }
+
     /**
      * @param restaurant_id Eleme
      * @return
@@ -166,6 +179,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
      * @param shopLatitude
      * @return
      */
+    @Override
     public RespBean restaurants(String offset, String shopLongitude, String shopLatitude, String categoryIds) {
         String restaurantsUrl = "https://mainsite-restapi.ele.me/shopping/restaurants?latitude=${latitude}&longitude=${longitude}&keyword=&offset=${offset}&limit=30&extras[]=activities";
         restaurantsUrl = restaurantsUrl.replace("${longitude}", shopLongitude);
@@ -210,7 +224,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         formMap.put("partner", "4");
         formMap.put("page_index", pageIndex);
         formMap.put("apage", "1");
-        RespBean respBean1 = post(url.toString(), formMap, encoding, reqHeader);
+        RespBean respBean1 = executePostFrom(url.toString(), formMap, encoding,reqHeader);
         String content = respBean1.getContent();
         JSONObject data = null;
         if (StringUtils.isNotEmpty(content)) {
@@ -401,12 +415,16 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
     }
 
     private void removeOutterKeys(JSONObject jsonObject) {
-        if (null == jsonObject) return;
+        if (null == jsonObject) {
+            return;
+        }
         jsonObject.remove("rank_strategy_tag");
         jsonObject.remove("remind_infos");
         jsonObject.remove("rank_strategy_version");
         JSONArray poilist = JSONUtil.getJSONArray(jsonObject, "poilist");
-        if (null == poilist) return;
+        if (null == poilist) {
+            return;
+        }
         Iterator<Object> iterator = poilist.iterator();
         while (iterator.hasNext()) {
             JSONObject jsonObject1 = (JSONObject) iterator.next();
@@ -477,7 +495,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
         Map<String, String> reqHeader = new HashMap<>();
         reqHeader.put("Cookie", cookies.toString());
         reqHeader.put("User-Agent", userAgent);
-        RespBean shopCookieInfo = post(url.toString(), reqParamMap, encoding, reqHeader);
+        RespBean shopCookieInfo = executePostFrom(url.toString(), reqParamMap, encoding, reqHeader);
         JSONObject shopCookieJSON = JSONUtil.parseObject(shopCookieInfo.getContent());
         if (null == shopCookieJSON) {
             shopCookieJSON = new JSONObject();
@@ -493,7 +511,7 @@ public class UrlServiceImpl extends AbstractService implements UrlService {
             url.append("_token").append("=").append(_token);  // 这样可取值
             reqParamMap.put("wmpoiid", reqParamMap.get("wm_poi_id"));
             reqParamMap.remove("wm_poi_id");
-            RespBean shopInfo = post(url.toString(), reqParamMap, encoding, reqHeader);
+            RespBean shopInfo = executePostFrom(url.toString(), reqParamMap, encoding, reqHeader);
             String content = shopInfo.getContent();
             if (StringUtils.isEmpty(content)) {
                 logger.error("the content of the shop detail is empty");

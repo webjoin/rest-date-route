@@ -98,6 +98,7 @@ public class DpListBootstrap extends BaseBootstrap {
     JSONArray regionNavs;
     JSONArray categoryNavs;
 
+    @Override
     public void crawl(String[] args) {
 
 
@@ -279,10 +280,17 @@ public class DpListBootstrap extends BaseBootstrap {
             int parentId = regionBeanJSON.getIntValue("parentId");
             int regionId1 = regionBeanJSON.getIntValue("id");
             String name = regionBeanJSON.getString("name");
-            if (parentId != parentRegionId) continue;
-            if (regionId1 == -10000) continue;
-            if (parentRegionId != 0)
-                if (regionId1 == parentId) continue;
+            if (parentId != parentRegionId) {
+                continue;
+            }
+            if (regionId1 == -10000) {
+                continue;
+            }
+            if (parentRegionId != 0) {
+                if (regionId1 == parentId) {
+                    continue;
+                }
+            }
             String regionId = regionId1 + "";
             String timestamp = System.currentTimeMillis() + "";
             RespBean respBean = urlService.searchshop4Dp(0, cityId, regionId, categoryid, timestamp);

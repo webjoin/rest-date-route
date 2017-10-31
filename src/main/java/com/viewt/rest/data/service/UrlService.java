@@ -25,14 +25,22 @@ public interface UrlService {
     void testAbuyun();
 
 
-    RespBean post(String url,
-                  Map<String, String> formMap,
-                  String encoding,
-                  Map<String, String> reqHeader);
+//    RespBean executePostFrom(String url,
+//                  Map<String, String> formMap,
+//                  String encoding,
+//                  Map<String, String> reqHeader);
+//
+//    RespBean executePostJson(String url,
+//                         String reqBodyJson,
+//                         String encoding,
+//                         Map<String, String> reqHeader);
 
 
     RespBean searchPoiNearby(String keyword, String longitude, String latitude);
 
+
+    RespBean executePostFrom(String url, Map<String, String> formMap, Map<String, String> header);
+    RespBean executePostJson(String url, String reqBodyJson, Map<String, String> header);
 
     RespBean getEleShop(long restaurant_id);
 

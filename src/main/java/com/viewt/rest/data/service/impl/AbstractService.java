@@ -25,6 +25,7 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -50,21 +51,11 @@ public class AbstractService {
 
     protected static String encoding = "utf-8";
     protected static String userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
-    // 代理服务器
-    final static String proxyHost = "proxy.abuyun.com";
-    final static Integer proxyPort = 9020;
-    // 代理隧道验证信息
-    final static String proxyUser = "HJ9W1Y72W50MHNID";
-    final static String proxyPass = "08E1EA3749F6003F";
-
-    // IP切换协议头
-    final static String switchIpHeaderKey = "Proxy-Switch-Ip";
-    final static String switchIpHeaderVal = "yes";
 
     public RespBean get(String url,
                         String encoding,
                         Map<String, String> reqHeader) {
-        return getRespBean("get", url, null, reqHeader);
+        return getRespBean("get", url, null,null, reqHeader);
     }
 
 //    private static PoolingHttpClientConnectionManager cm = null;
@@ -73,6 +64,7 @@ public class AbstractService {
     //    private static CredentialsProvider credsProvider = null;
 //    private static RequestConfig reqConfig = null;
     protected static int timeout = 5 * 1000;
+
 
 //    static {
 //        ConnectionSocketFactory plainsf = PlainConnectionSocketFactory.getSocketFactory();
@@ -239,7 +231,7 @@ public class AbstractService {
             response = EntityUtils.toString(httpResponse.getEntity(), encoding);
             respBean.setContent(response);
             respBean.setCookies(cookies);
-            logger.error("testing ... : {}", httpResponse.getStatusLine().getStatusCode());
+            logger.error("response status is {}", httpResponse.getStatusLine().getStatusCode());
         } finally {
             httpResponse.close();
         }
@@ -264,7 +256,9 @@ public class AbstractService {
     }
 
     private void plus() {
-        if (stastic == 0) sStastic = System.currentTimeMillis();
+        if (stastic == 0) {
+            sStastic = System.currentTimeMillis();
+        }
         stastic++;
 
 
@@ -275,17 +269,28 @@ public class AbstractService {
 
     }
 
-    public RespBean post(String url,
-                         Map<String, String> formMap,
-                         String encoding,
-                         Map<String, String> reqHeader) {
+//    public RespBean post(String url,
+//                         Map<String, String> formMap,
+//                         String encoding,
+//                         Map<String, String> reqHeader) {
+//
+//        return getRespBean("post", url, formMap, reqHeader);
+//    }
 
-        return getRespBean("post", url, formMap, reqHeader);
+    protected RespBean executePostFrom(String url, Map<String, String> formMap, String encoding, Map<String, String> reqHeader) {
+
+        return getRespBean("post", url, formMap,null, reqHeader);
+    }
+
+    protected RespBean executePostJson(String url, String reqBodyJson, String encoding, Map<String, String> reqHeader) {
+
+        return getRespBean("post", url, null,reqBodyJson, reqHeader);
     }
 
 
     private RespBean getRespBean(String method, String url,
                                  Map<String, String> formMap, /* if get , is null */
+                                 String reqBodyJson,
                                  Map<String, String> reqHeader) {
         plus();
         int flag = 10;
@@ -299,7 +304,7 @@ public class AbstractService {
                     sleep(1 * 1000);
                 }
                 if ("post".equals(method)) {
-                    respBean = post(url, formMap, reqHeader);    //httpclient
+                    respBean = post(url, formMap, reqBodyJson,reqHeader);    //httpclient
                 } else {
                     respBean = get(url, reqHeader);    //httpclient
                 }
@@ -343,7 +348,9 @@ public class AbstractService {
                 hasException = true;
                 if (StringUtils.isNotEmpty(resp)) {
                     String val;
-                    if (resp.length() > 10) val = resp.substring(0, 10);
+                    if (resp.length() > 10) {
+                        val = resp.substring(0, 10);
+                    }
                     else {
                         val = resp;
                     }
@@ -354,7 +361,9 @@ public class AbstractService {
             } finally {
                 if (!hasException) {
                     String val;
-                    if (resp.length() > 10) val = resp.substring(0, 10);
+                    if (resp.length() > 10) {
+                        val = resp.substring(0, 10);
+                    }
                     else {
                         val = resp;
                     }
@@ -362,12 +371,14 @@ public class AbstractService {
                 }
             }
         } while (flag >= 0);
-        if (null == resp) resp = "";
+        if (null == resp) {
+            resp = "";
+        }
         return respBean;
     }
 
     private void handle403ForCookie(String url) {
-        if (url.contains("dianping.com")){
+        if (url.contains("dianping.com")) {
 //            try {
 //                logger.info("sleeping 10s");
 //                TimeUnit.SECONDS.sleep(10);
@@ -381,7 +392,7 @@ public class AbstractService {
 
     private RespBean post(String url,
                           Map<String, String> formMap,
-//                                String encoding,
+                          String postJson,
                           Map<String, String> reqHeader) {
         RespBean respBean = new RespBean();
         CloseableHttpClient client = HttpClients.createDefault();
@@ -395,10 +406,16 @@ public class AbstractService {
                     .build();
             httpPost.setConfig(config);
             List<NameValuePair> list = new ArrayList<>();
-            Iterator iterator = formMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, String> elem = (Map.Entry<String, String>) iterator.next();
-                list.add(new BasicNameValuePair(elem.getKey(), elem.getValue()));
+            if (Objects.nonNull(formMap)) {
+                Iterator iterator = formMap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<String, String> elem = (Map.Entry<String, String>) iterator.next();
+                    list.add(new BasicNameValuePair(elem.getKey(), elem.getValue()));
+                }
+            }else{
+                StringEntity stringEntity = new StringEntity(postJson);
+                stringEntity.setContentType("application/json; charset=utf-8");
+                httpPost.setEntity(stringEntity);
             }
             if (list.size() > 0) {
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, encoding);
