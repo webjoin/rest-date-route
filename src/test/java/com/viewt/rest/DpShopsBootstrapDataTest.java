@@ -3,20 +3,16 @@ package com.viewt.rest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.viewt.rest.data.DpBootstrapIdsFile;
 import com.viewt.rest.data.DpShopBootstap2Db;
 import com.viewt.rest.data.test.db.DbBootstrap;
 import com.viewt.rest.data.util.HttpUtil;
-import com.viewt.rest.entity.restdata.DpShopListBean;
 import com.viewt.rest.entity.restdata.DpShopsBean;
-import com.viewt.rest.mapper.restdata.DpShopListBeanMapper;
 import com.viewt.rest.mapper.restdata.DpShopsBeanMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**

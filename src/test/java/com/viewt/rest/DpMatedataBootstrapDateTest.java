@@ -33,13 +33,13 @@ public class DpMatedataBootstrapDateTest extends DbBootstrap {
     private void deal() {
 
         String s = "https://mapi.dianping.com/searchshop.json?start=0&regionid=0&categoryid=10&sortid=0&locatecityid={0}&maptype=0&cityid={1}&_=1500888002070&callback=Zepto1500887828836";
-        String[] dp_cityIds = WaimaiBootstrap.dp_cityIds;
+        String[] dpCityIds = Cons.Dianping.CITY_IDS;
         reqHeader.put(Cons.USER_AGENT, Cons.MOBILE_USER_AGENT);
 
         this.initSqlSessionFactory("local");
 
-        for (int i = 0; i < dp_cityIds.length; i++) {
-            String cityId = dp_cityIds[i];
+        for (int i = 0; i < dpCityIds.length; i++) {
+            String cityId = dpCityIds[i];
             if (!"15".equals(cityId)) continue;
             String formatUrl = MessageFormat.format(s, cityId, cityId);
             RespBean contentByUrl = urlService.getContentByUrl(formatUrl, reqHeader);

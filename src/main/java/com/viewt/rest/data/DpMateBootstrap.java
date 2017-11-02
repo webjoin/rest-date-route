@@ -17,9 +17,12 @@ import java.util.List;
 /**
  * Created by Elijah on 24/7/2017.
  * -Darea=dp-mate
+ *
+ * 接下来是
+ * @see com.viewt.rest.data.DpShopQtyCollectionBootstrap
+ * 出马
  */
 public class DpMateBootstrap extends BaseBootstrap {
-    protected boolean initDatasouce = true;
 
     public static void main(String[] args) {
         DpMateBootstrap bootstrap = new DpMateBootstrap();
@@ -29,14 +32,11 @@ public class DpMateBootstrap extends BaseBootstrap {
     @Override
     protected void crawl(String[] args) {
         String s = "https://mapi.dianping.com/searchshop.json?start=0&regionid=0&categoryid=10&sortid=0&locatecityid={0}&maptype=0&cityid={1}&_=1500888002070&callback=Zepto1500887828836";
-        String[] dp_cityIds = WaimaiBootstrap.dp_cityIds;
+        String[] dp_cityIds = Cons.Dianping.CITY_IDS;
         reqHeader.put(Cons.USER_AGENT, Cons.MOBILE_USER_AGENT);
 
         for (int i = 0; i < dp_cityIds.length; i++) {
             String cityId = dp_cityIds[i];
-            if ("1".equals(cityId)) {
-                continue;
-            }
             String formatUrl = MessageFormat.format(s, cityId, cityId);
             RespBean contentByUrl = urlService.getContentByUrl(formatUrl, reqHeader);
             String content = contentByUrl.getContent();

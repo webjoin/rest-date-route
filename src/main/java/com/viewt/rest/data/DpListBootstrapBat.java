@@ -31,11 +31,7 @@ public class DpListBootstrapBat extends BaseBootstrap {
         String s = Cons.USER_DIR + "/logs/other/other-dp_category_qty.log";
         List<String> list = FileUtil.readFile(s);
         List<String> rs = new ArrayList<>(list.size());
-        int k = 0;
         for (String s1 : list) {
-//            if (k++ > 20) {
-//                break;
-//            }
             String[] split = s1.split(",");
             int length = split.length;
 

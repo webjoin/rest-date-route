@@ -59,10 +59,10 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
      * 根据分类生成可采集的 入口ID
      */
     private void saveCategoryId() {
-        String[] dp_cityIds = WaimaiBootstrap.dp_cityIds;
+        String[] dp_cityIds = Cons.Dianping.CITY_IDS;
         for (int j = 0; j < dp_cityIds.length; j++) {
+            System.out.println(String.format("dealing...  %s/%s",j,dp_cityIds.length));
             String cityId = dp_cityIds[j];
-//            if (!"1".equals(cityId)) continue;
             DpCategoryRegionBean dpCategoryRegionBean = excute(cityId);
             testGetSubCategory(cityId, dpCategoryRegionBean);
 
@@ -75,11 +75,9 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
 
             for (DpCategoryNavsBean child : children) {  //菜系 分类
                 String regionId = "0";
-//            String regionName = "全部美食";
                 String categoryId = child.getId() + "";
                 String categoryCount = getCategoryCount(regionId, categoryId, cityId, time);
                 String val = "regionId," + regionId + ",categoryId," + categoryId + ",count," + categoryCount;
-//            val = "regionId," + regionName + ",categoryId," + child.getName() + ",count," + categoryCount;
                 vals.add(val);
                 if (5000 < Integer.parseInt(categoryCount)) {//subCategoryCount
                     List<DpCategoryNavsBean> subCategorys = child.getChildren();
@@ -91,27 +89,13 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
                                 + ",regionId1," + regionNavsBean.getId() + ",categoryId1," + categoryId + ",count1," + subCategoryCount
                         ;
                         vals.add(val);
-//                        if (5000 < Integer.parseInt(subCategoryCount)) {
-//                            List<DpRegionNavsBean> children1 = regionNavsBean.getChildren();
-//                            for (DpRegionNavsBean navsBean : children1) {
-//                                String subCategoryCount1 = getCategoryCount(navsBean.getId() + "", categoryId + "", cityId, time);
-//                                val = "regionId," + regionId + ",categoryId," + categoryId + ",count," + categoryCount
-//                                        + ",regionId1," + regionNavsBean.getId() + ",categoryId1," + categoryId + ",count1," + subCategoryCount
-//                                        + ",regionId1," + navsBean.getId() + ",categoryId1," + categoryId + ",count1," + subCategoryCount1
-//                                ;
-//                                vals.add(val);
-//                            }
-//                        }
                     }
-//                    } else
                     for (DpCategoryNavsBean subCategory : subCategorys) {
                         int subCategoryId = subCategory.getId();
                         String subCategoryCount = getCategoryCount(regionId, subCategoryId + "", cityId, time);
                         val = "regionId," + regionId + ",categoryId," + categoryId + ",count," + categoryCount
                                 + ",regionId1," + regionId + ",categoryId1," + subCategoryId + ",count1," + subCategoryCount;
 
-//                    val = "regionId," + regionName + ",categoryId," + child.getName() + ",count," + categoryCount
-//                            + ",regionId1," + regionName + ",categoryId1," + subCategory.getName() + ",count1," + subCategoryCount;
                         vals.add(val);
                         if (5000 < Integer.parseInt(subCategoryCount) || "本帮江浙菜".equals(child.getName())) {//subCategoryCount
                             List<DpRegionNavsBean> regionNavsBeans = dpRegionNavsBean.getChildren(); //行政区
@@ -121,9 +105,6 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
                                 val = "regionId," + regionId + ",categoryId," + categoryId + ",count," + categoryCount
                                         + ",regionId1," + regionId + ",categoryId1," + subCategoryId + ",count1," + subCategoryCount
                                         + ",regionId2," + regionId1 + ",categoryId2," + subCategoryId + ",count2," + regionCount;
-//                            val = "regionId," + regionName + ",categoryId," + child.getName() + ",count," + categoryCount
-//                                    + ",regionId1," + regionName + ",categoryId1," + subCategory.getName() + ",count1," + subCategoryCount
-//                                    + ",regionId2," + regionNavsBean.getName() + ",categoryId2," + subCategory.getName() + ",count2," + regionCount;
                                 vals.add(val);
                                 if (5000 < Integer.parseInt(regionCount)) {
                                     List<DpRegionNavsBean> children1 = regionNavsBean.getChildren();
@@ -134,10 +115,6 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
                                                 + ",regionId1," + regionId + ",categoryId1," + subCategoryId + ",count1," + subCategoryCount
                                                 + ",regionId2," + regionId1 + ",categoryId2," + subCategoryId + ",count2," + regionCount
                                                 + ",regionId3" + regionId2 + ",categoryId3," + subCategoryId + ",count3," + regionCount2;
-//                                    val = "regionId," + regionName + ",categoryId," + child.getName() + ",count," + categoryCount
-//                                            + ",regionId1," + regionName + ",categoryId1," + subCategory.getName() + ",count1," + subCategoryCount
-//                                            + ",regionId2," + regionNavsBean.getName() + ",categoryId2," + subCategory.getName() + ",count2," + regionCount
-//                                            + ",regionId3" + navsBean.getName() + ",categoryId3," + subCategory.getName() + ",count3," + regionCount2;
                                         vals.add(val);
                                     }
                                 }
@@ -194,6 +171,9 @@ public class DpShopQtyCollectionBootstrap extends BaseBootstrap {
 
     DpCategoryRegionBean excute(String cityid) {
         String join = getCityCategoryJson(cityid);
+        if (Objects.isNull(join)){
+            System.out.println(cityid+"");
+        }
         JSONObject jsonObject = JSON.parseObject(join);
         JSONArray categoryNavs = jsonObject.getJSONArray("categoryNavs");
         JSONArray regionNavs = jsonObject.getJSONArray("regionNavs");

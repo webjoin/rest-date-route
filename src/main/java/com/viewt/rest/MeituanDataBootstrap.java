@@ -40,7 +40,6 @@ public class MeituanDataBootstrap  extends BaseBootstrap {
                     String name = infoJson.getString("name");
                     String cateName = infoJson.getString("cateName");
                     logger.info("{},{},{},{},{},{}",cityName,name,areaName,cateName,cityId,page);
-
                 });
 
             });
