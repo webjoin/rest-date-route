@@ -28,9 +28,9 @@
             </Filters>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="6000 MB"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="6000"/>
+            <DefaultRolloverStrategy max="100"/>
         </RollingRandomAccessFile>
 
         <RollingRandomAccessFile name="OTHER_LOG_FILE_ERR"   

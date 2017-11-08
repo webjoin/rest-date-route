@@ -15,6 +15,12 @@ public interface Cons {
      String PC_USER_AGENT = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1";
 
      interface Dianping{
+         /**
+          * 0点评ID
+          * 1页码
+          * http://www.dianping.com/shop/80990733/review_more?pageno=2
+          */
+         String DP_COMMENT_URL="http://www.dianping.com/shop/{0}/review_more?pageno={1}";
          String[] CITY_IDS = {
                  "15","1", "2", "3", "4", "5", "6","7", "8", "9", "10", "11", "12", "13", "14", "16", "17", "18", "19", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31",
                  "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
