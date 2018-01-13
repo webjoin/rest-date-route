@@ -21,16 +21,44 @@
         <!--<RollingRandomAccessFile name="OTHER_LOG_FILE" -->
         <RollingRandomAccessFile name="OTHER_LOG_FILE"
                                  fileName="logs/other/other-${sys:area}.log"
-                                 filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-%d{yyyy-MM-dd}-%i.log.gz">
+                                 filePattern="logs/other/$${date:yyyyMM}/other-${sys:area}-%d{yyyyMMddHH}-%i.log.gz">
             <PatternLayout charset="UTF-8" pattern="%m%n"/>
             <Filters>
                 <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
             </Filters>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="100 MB"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="100"/>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="OTHER_day_LOG_FILE"
+                                 fileName="logs/other/day-${sys:area}.log"
+                                 filePattern="logs/other/$${date:yyyyMMdd}/day-${sys:area}-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="%m%n"/>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="OTHER_hour_LOG_FILE"
+                                 fileName="logs/other/hour-${sys:area}.log"
+                                 filePattern="logs/other/$${date:yyyyMMdd}/hour-${sys:area}-%d{yyyyMMddHH}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="%m%n"/>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
         </RollingRandomAccessFile>
 
         <RollingRandomAccessFile name="OTHER_LOG_FILE_ERR"   
@@ -55,9 +83,9 @@
             <ThresholdFilter level="warn" onMatch="DENY" onMismatch="ACCEPT"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="100 MB"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="200"/>
+            <DefaultRolloverStrategy max="20"/>
         </RollingRandomAccessFile>
         <RollingRandomAccessFile name="SERVICE_LOG_FILE1-error" 
                                  fileName="logs/ele/wm-ele-err.log"
@@ -68,7 +96,7 @@
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="20 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="40"/>
+            <DefaultRolloverStrategy max="20"/>
         </RollingRandomAccessFile>
     </Appenders>
 
@@ -83,11 +111,33 @@
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE"/>
         </Logger>
+        <Logger name="com.viewt.massage.day" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="OTHER_day_LOG_FILE"/>
+            <AppenderRef ref="OTHER_LOG_FILE_ERR"/>
+        </Logger>
+
+        <Logger name="com.viewt.massage.hour" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="OTHER_hour_LOG_FILE"/>
+            <AppenderRef ref="OTHER_LOG_FILE_ERR"/>
+        </Logger>
+
+        <Logger name="com.viewt.massage.MassageActivityApplication" level="INFO" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="OTHER_day_LOG_FILE"/>
+            <AppenderRef ref="OTHER_LOG_FILE_ERR"/>
+        </Logger>
+
+
+
         <Logger name="com.viewt.rest.ElemeBootstrap" level="INFO" additivity="false">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="SERVICE_LOG_FILE1"/>
             <AppenderRef ref="SERVICE_LOG_FILE1-error"/>
         </Logger>
+
+
 
     </Loggers>
 </Configuration>

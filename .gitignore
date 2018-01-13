@@ -5,3 +5,4 @@ target/
 *.zip
 mate/
 bin/
+**/.DS_Store
