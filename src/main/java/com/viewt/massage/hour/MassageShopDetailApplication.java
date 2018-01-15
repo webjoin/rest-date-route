@@ -13,6 +13,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author tangyu
@@ -37,7 +38,7 @@ public class MassageShopDetailApplication extends BaseBootstrap {
 
     UrlService urlService;
     int dc_index = -1;
-
+    AtomicInteger atomicInteger = new AtomicInteger(10);
     @Override
     protected void crawl(String[] args) {
         String filepath = Cons.USER_DIR + "/logs/other/day-massage-shop-data.log";
@@ -51,6 +52,12 @@ public class MassageShopDetailApplication extends BaseBootstrap {
         urlService = new UrlServiceImpl();
         logger.info("{},{},{}", "商店ID", "已购买人次", "序号", "时间");
         for (String id : ids) {
+            String agent = MessageFormat.format(Cons.PC_USER_AGENT_1, atomicInteger.addAndGet(1) + "");
+//            System.out.println(agent);
+            reqHeader.put(Cons.COOKIE, MessageFormat.format(cookie, Instant.now().getEpochSecond() + ""));
+            reqHeader.put(Cons.USER_AGENT, agent);
+
+
             String url = MessageFormat.format(Cons.Dianping.MASSAGE_DISTRICTS_M_BASE, id, Instant.now().toEpochMilli() + "");
             RespBean contentBean = urlService.getContentByUrl(url, reqHeader);
             String content = contentBean.getContent();

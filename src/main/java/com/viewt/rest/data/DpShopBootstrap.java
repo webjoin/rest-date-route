@@ -136,7 +136,6 @@ public class DpShopBootstrap extends BaseBootstrap {
         reqHeader.put("Pragma", "no-cache");
         reqHeader.put("Upgrade-Insecure-Requests", "1");
         reqHeader.put("Cookie", "_lxsdk_s=%7C%7C0"); //249
-
         reqHeader.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/" + agentVersion + "." + agentVersion1);
         System.out.println("agentVersion-------->>>" + agentVersion++ + "-->>agentVersion1-->" + agentVersion1++);
 

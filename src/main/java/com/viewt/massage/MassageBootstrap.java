@@ -153,7 +153,7 @@ public class MassageBootstrap implements Runnable, Job {
                 break;
             case Cons.Job.JOB_MASSAGE_SHOP_DETAIL:
                 logger.error("runShopDetail这在调度商户任务 ");
-//                runShopDetail();
+                runShopDetail();
                 logger.error("runShopDetail这在调度商户任务完成 ");
                 break;
             default:
