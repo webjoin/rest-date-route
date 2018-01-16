@@ -1,6 +1,7 @@
 package com.viewt.rest.data.bean;
 
 import com.alibaba.fastjson.JSON;
+import com.viewt.rest.data.util.Massage;
 
 import java.time.LocalDate;
 
@@ -13,33 +14,58 @@ public class MassageShopBean {
     /**
      * yyyy-mm-dd
      */
+    @Massage("日期")
     private LocalDate date;
+
+    @Massage("点ID")
     private String shopId;
+
+    @Massage("点名称")
     private String shopName;
+
     /**
      * //人均
      */
+    @Massage("人均")
     private String priceText;
     /**
      * 商圈
      */
+    @Massage("商圈")
     private String regionName;
     /**
      * 预订
      */
+    @Massage("预订")
     private String bookable;
+
     /**
      * 团购
      */
+    @Massage("团购")
+
     private String dealable;
 
-
+    @Massage("采集地址")
     private String url;
+
+
 
     public MassageShopBean() {
     }
 
-    public MassageShopBean(String url,LocalDate localDate) {
+    public MassageShopBean(LocalDate date, String shopId, String shopName, String priceText, String regionName, String bookable, String dealable, String url) {
+        this.date = date;
+        this.shopId = shopId;
+        this.shopName = shopName;
+        this.priceText = priceText;
+        this.regionName = regionName;
+        this.bookable = bookable;
+        this.dealable = dealable;
+        this.url = url;
+    }
+
+    public MassageShopBean(String url, LocalDate localDate) {
         this.url = url;
         this.date = localDate;
     }

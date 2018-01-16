@@ -6,3 +6,4 @@ target/
 mate/
 bin/
 **/.DS_Store
+conf/mail.properties

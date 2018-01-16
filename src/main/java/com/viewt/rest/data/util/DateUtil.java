@@ -11,6 +11,10 @@ public class DateUtil {
 
     final static String YYMMDD = "yyMMdd";
     final static String YYYY_MM_DD = "yyyy-MM-dd";
+    /**
+     * 2018011509
+     */
+    public final static String YYYYMMDDHHMM = "yyyyMMddHH";
 
 
     /**秒

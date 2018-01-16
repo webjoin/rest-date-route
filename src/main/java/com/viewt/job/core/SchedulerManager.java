@@ -80,7 +80,7 @@ public class SchedulerManager {
         try {
             addJob(jobName, triggerName, cron, MassageBootstrap.class, map);
         } catch (Exception e) {
-            logger.error("添加任务错误。。。");
+            logger.error(jobName + "添加任务错误。。。",e);
         }
     }
 
@@ -94,9 +94,21 @@ public class SchedulerManager {
         try {
             addJob(jobName, triggerName, cron, MassageBootstrap.class, map);
         } catch (Exception e) {
-            logger.error("添加任务错误。。。");
+            logger.error(jobName + "添加任务错误。。。",e);
         }
     }
 
 
+    public void addJob4MassageData2Mail(String data2mailCron) {
+        String jobName = Cons.Job.JOB_MASSAGE_DATA_TO_MAIL_TIME;
+        String triggerName = Cons.Job.JOB_MASSAGE_DATA_TO_MAIL_TIME;
+        Map<String, String> map = new HashMap<>(1);
+        String type = "type";
+        map.put(type, Cons.Job.TYPE_SHOP_DATA);
+        try {
+            addJob(jobName, triggerName, data2mailCron, MassageBootstrap.class, map);
+        } catch (Exception e) {
+            logger.error(jobName + "添加任务错误。。。",e);
+        }
+    }
 }

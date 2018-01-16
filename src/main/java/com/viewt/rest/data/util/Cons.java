@@ -113,9 +113,12 @@ public interface Cons {
     interface Job{
         String TYPE_SHOP = "SHOP";
         String TYPE_SHOP_DETAIL = "SHOP_DETAIL";
+        String TYPE_SHOP_DATA = "SHOP_DETAIL";
 
-        String JOB_MASSAGE_SHOP="massage.shop";
-        String JOB_MASSAGE_SHOP_DETAIL = "massage.shop.detail";
+        String JOB_MASSAGE_SHOP="job.massage.shop";
+        String JOB_MASSAGE_DATA_DATE="job.massage.data.date";
+        String JOB_MASSAGE_SHOP_DETAIL = "job.massage.shop.detail";
+        String JOB_MASSAGE_DATA_TO_MAIL_TIME = "job.massage.data.to.mail.time";
 
     }
 

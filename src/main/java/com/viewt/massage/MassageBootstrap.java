@@ -7,6 +7,7 @@ import com.viewt.massage.day.MassageShopApplication;
 import com.viewt.massage.day.MassageShopDataApplication;
 import com.viewt.massage.hour.MassageActivityDetailApplication;
 import com.viewt.massage.hour.MassageShopDetailApplication;
+import com.viewt.massage.mail.UploadMassageData2mailBootstrap;
 import com.viewt.rest.data.util.Cons;
 import com.viewt.rest.data.util.Log4jUtil;
 import org.quartz.*;
@@ -73,24 +74,32 @@ public class MassageBootstrap implements Runnable, Job {
 
     private static void invoke(String[] args) throws IOException {
 
-        Properties properties = loadConf();
+        Properties properties = loadConf(getConfFile());
         String shopCron = properties.getProperty(Cons.Job.JOB_MASSAGE_SHOP);
         String detailCron = properties.getProperty(Cons.Job.JOB_MASSAGE_SHOP_DETAIL);
+        String data2mailCron = properties.getProperty(Cons.Job.JOB_MASSAGE_DATA_TO_MAIL_TIME);
 
         SchedulerManager instance = SchedulerManager.getInstance();
+
         instance.addJob4MassageShop(shopCron);
+
         instance.addJob4MassageShopDetail(detailCron);
 
+        instance.addJob4MassageData2Mail(data2mailCron);
+
     }
 
-    private static String getConfFile() {
+    public static String getConfFile() {
         return Cons.USER_DIR + "/conf/conf.properties";
     }
+    public static String getMailConfFile() {
+        return Cons.USER_DIR + "/conf/mail.properties";
+    }
 
-    private static Properties loadConf() {
+    public static Properties loadConf(String configFile) {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream(getConfFile()));
+            properties.load(new FileInputStream(configFile));
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -140,21 +149,32 @@ public class MassageBootstrap implements Runnable, Job {
 
     }
 
+    /**
+     * 每小时
+     */
+    public void runData2Mail() {
+        UploadMassageData2mailBootstrap.main(args);
+    }
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDetail jobDetail = context.getJobDetail();
         JobKey key = jobDetail.getKey();
-        System.out.println("abc11111-->" + key.getName());
         switch (key.getName()) {
             case Cons.Job.JOB_MASSAGE_SHOP:
-                logger.error("runShop这在调度商户任务 ");
+                logger.error("runShop 这在调度商户任务 ");
                 runShop();
-                logger.error("runShop这在调度商户任务完成 ");
+                logger.error("runShop 这在调度商户任务 done ");
                 break;
             case Cons.Job.JOB_MASSAGE_SHOP_DETAIL:
-                logger.error("runShopDetail这在调度商户任务 ");
+                logger.error("runShopDetail 这在调度商户任务 ");
                 runShopDetail();
-                logger.error("runShopDetail这在调度商户任务完成 ");
+                logger.error("runShopDetail 这在调度商户任务 done ");
+                break;
+            case Cons.Job.JOB_MASSAGE_DATA_TO_MAIL_TIME:
+                logger.error("runData2Mail 这在调度商户任务 ");
+                runData2Mail();
+                logger.error("runData2Mail 这在调度商户任务 done ");
                 break;
             default:
                 break;
